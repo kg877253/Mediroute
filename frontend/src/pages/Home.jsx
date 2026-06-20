@@ -1,34 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
-// Health Insights Dashboard Component
-const HealthInsights = () => {
-  const insights = [
-    { label: "Most Searched Today", value: "Cardiologist", city: "Delhi" },
-    { label: "Emergency Searches", value: "23%", time: "this week" },
-    { label: "Active Users", value: "1,247", time: "currently online" },
-    { label: "Doctors Available", value: "120", time: "across all cities" }
-  ]
-
-  return (
-    <div className="w-full px-6 py-6">
-      <div className="rounded-2xl border border-teal/20 bg-gradient-to-r from-navy to-navy-light p-8 shadow-xl shadow-navy/20">
-        <h2 className="text-2xl font-bold text-white mb-6">📊 Health Insights</h2>
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-          {insights.map((insight, index) => (
-            <div key={index} className="rounded-2xl bg-white/10 backdrop-blur p-6 transition-all hover:bg-white/20 min-h-[120px]">
-              <div className="text-xs font-semibold uppercase text-white/70 mb-2">{insight.label}</div>
-              <div className="text-3xl font-bold text-white">{insight.value}</div>
-              <div className="text-sm font-medium text-white/60 mt-2 overflow-hidden text-ellipsis whitespace-nowrap">
-                {insight.city ? `${insight.city} • ${insight.time}` : insight.time}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
+import Header from '../components/layout/Header'
+import Footer from '../components/layout/Footer'
+import Hero from '../components/home/Hero'
+import RecentSearches from '../components/home/RecentSearches'
+import SearchForm from '../components/home/SearchForm'
+import EmergencyModal from '../components/home/EmergencyModal'
 
 function Home() {
   const [symptomText, setSymptomText] = useState('')
@@ -41,102 +18,34 @@ function Home() {
   const [history, setHistory] = useState(() => {
     return JSON.parse(localStorage.getItem('symptomHistory') || '[]')
   })
-  const [isListening, setIsListening] = useState(false)
+  
   const navigate = useNavigate()
   const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
-
-  // Voice recognition setup
-  useEffect(() => {
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-      const recognition = new SpeechRecognition()
-      recognition.continuous = false
-      recognition.interimResults = false
-      recognition.lang = 'en-US'
-
-      recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript
-        setSymptomText(transcript)
-        setIsListening(false)
-      }
-
-      recognition.onerror = () => {
-        setIsListening(false)
-      }
-
-      recognition.onend = () => {
-        setIsListening(false)
-      }
-
-      window.recognition = recognition
-    }
-  }, [])
-
-  const startListening = () => {
-    if (window.recognition) {
-      setIsListening(true)
-      window.recognition.start()
-    }
-  }
-
-  const cities = ['Delhi', 'Mumbai', 'Jaipur', 'Goa', 'Bangalore']
-  const quickSymptoms = [
-    { label: 'Chest pain', text: 'I have chest pain and difficulty breathing' },
-    { label: 'Skin rash', text: 'I have an itchy skin rash on my arm' },
-    { label: 'Tooth pain', text: 'My tooth hurts badly when I eat' },
-    { label: 'Child fever', text: 'My child has fever and cough' },
-    { label: 'Ear pain', text: 'I have ear pain and blocked nose' },
-    { label: 'Severe headache', text: 'I have severe headache with nausea' }
-  ]
-
-  const emergencyHospitals = {
-    Delhi: [
-      { name: 'AIIMS Emergency Department', phone: '011-26588500', location: 'Ansari Nagar, New Delhi' },
-      { name: 'Max Super Speciality Hospital', phone: '011-26515050', location: 'Saket, New Delhi' },
-      { name: 'Safdarjung Hospital', phone: '011-26165060', location: 'Ansari Nagar West, New Delhi' }
-    ],
-    Mumbai: [
-      { name: 'KEM Hospital Emergency Room', phone: '022-24107000', location: 'Parel, Mumbai' },
-      { name: 'Kokilaben Dhirubhai Ambani Hospital', phone: '022-30999999', location: 'Andheri West, Mumbai' },
-      { name: 'Lilavati Hospital', phone: '022-26468000', location: 'Bandra West, Mumbai' }
-    ],
-    Jaipur: [
-      { name: 'SMS Hospital Emergency Ward', phone: '0141-2560291', location: 'Ashok Nagar, Jaipur' },
-      { name: 'Fortis Escorts Hospital', phone: '0141-2547000', location: 'Malviya Nagar, Jaipur' },
-      { name: 'Mahatma Gandhi Hospital', phone: '0141-2771777', location: 'Sitapura, Jaipur' }
-    ],
-    Goa: [
-      { name: 'Goa Medical College Emergency', phone: '0832-2458727', location: 'Bambolim, Goa' },
-      { name: 'Manipal Hospital Goa', phone: '0832-3048800', location: 'Dona Paula, Goa' },
-      { name: 'Healthway Hospital', phone: '0832-2495555', location: 'Old Goa' }
-    ],
-    Bangalore: [
-      { name: 'NIMHANS Casualty Services', phone: '080-26995000', location: 'Hosur Road, Bangalore' },
-      { name: 'St. John\'s Medical College Hospital', phone: '080-22065000', location: 'Sarjapur Road, Bangalore' },
-      { name: 'Apollo Hospitals', phone: '080-26304050', location: 'Bannerghatta Road, Bangalore' }
-    ]
-  }
 
   const openEmergencyMode = () => {
     setEmergencyCity(city)
     setShowEmergencyModal(true)
   }
 
-  const saveToHistory = (symptom, city, specialty) => {
+  const saveToHistory = (symptom, searchCity, specialty) => {
     const historyData = JSON.parse(localStorage.getItem('symptomHistory') || '[]')
     const newEntry = {
       symptom,
-      city,
+      city: searchCity,
       specialty,
       timestamp: new Date().toISOString()
     }
-    const updatedHistory = [newEntry, ...historyData].slice(0, 10)
+    const filteredHistory = historyData.filter(
+      item => !(item.symptom === symptom && item.city === searchCity)
+    )
+    const updatedHistory = [newEntry, ...filteredHistory].slice(0, 5)
     localStorage.setItem('symptomHistory', JSON.stringify(updatedHistory))
     setHistory(updatedHistory)
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    if (e && e.preventDefault) e.preventDefault()
+    
     if (!symptomText.trim()) {
       setError('Please describe your symptoms first.')
       return
@@ -192,318 +101,44 @@ function Home() {
     }
   }
 
+  const handleSelectHistory = (histSymptom, histCity) => {
+    setSymptomText(histSymptom)
+    setCity(histCity)
+  }
+
   return (
-    <div className="min-h-screen bg-bg font-sans text-text">
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-navy shadow-lg">
-        <div className="flex items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-2xl font-bold text-teal shadow-md">
-              +
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold leading-none text-white">
-                Medi<span className="text-teal-light">Route</span>
-              </h1>
-              <p className="mt-1 text-xs font-semibold text-white/70">Right doctor. Right cost. Right now.</p>
-            </div>
-          </div>
+    <div className="min-h-screen bg-bg font-sans text-text flex flex-col">
+      <Header onOpenEmergency={openEmergencyMode} />
 
-          <button
-            type="button"
-            onClick={openEmergencyMode}
-            className="rounded-xl bg-red-600 px-5 py-3 text-xs font-semibold uppercase text-white shadow-lg shadow-red-950/20 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-200 transition-all"
-          >
-            Emergency Mode
-          </button>
-        </div>
-      </header>
+      <RecentSearches history={history} onSelectHistory={handleSelectHistory} />
 
-      <HealthInsights />
-
-      {history.length > 0 && (
-        <div className="w-full px-6 py-6">
-          <div className="rounded-2xl border border-border bg-white p-6 shadow-md">
-            <h3 className="text-base font-semibold text-navy mb-4">🕐 Recent Searches</h3>
-            <div className="flex gap-3 overflow-x-auto pb-3">
-              {history.map((item, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setSymptomText(item.symptom)
-                    setCity(item.city)
-                  }}
-                  className="rounded-xl border border-border bg-bg px-5 py-4 text-left text-sm font-semibold text-navy hover:border-teal hover:bg-teal/10 hover:text-teal transition-all whitespace-nowrap min-w-[220px] hover:shadow-md min-h-[80px] flex flex-col justify-center"
-                >
-                  <div className="truncate overflow-hidden text-ellipsis">{item.symptom}</div>
-                  <div className="text-xs font-medium text-text-muted mt-2 overflow-hidden text-ellipsis">{item.city} • {item.specialty}</div>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      <main className="w-full px-6 py-12 lg:py-16">
+      <main className="max-w-7xl mx-auto px-6 py-6 lg:py-8 flex-1">
         <section className="grid items-start gap-12 lg:grid-cols-[1fr_1fr]">
-          <div className="rounded-3xl border border-border bg-white p-10 shadow-xl shadow-navy/5 md:p-12 min-h-[400px] flex flex-col justify-center">
-            <div className="inline-flex rounded-full border border-teal/20 bg-teal/10 px-4 py-2 text-xs font-semibold uppercase text-teal">
-              Gemini 2.5 Flash triage navigation
-            </div>
+          <Hero />
 
-            <h2 className="mt-8 text-4xl font-bold leading-tight text-navy md:text-[48px]">
-              Find the right specialist in under 60 seconds.
-            </h2>
-
-            <p className="mt-6 max-w-2xl text-lg leading-9 text-text-muted">
-              MediRoute turns symptoms into a safe care route: specialty, urgency, verified doctors, fee range, and emergency guidance.
-            </p>
-
-            <div className="mt-10 grid gap-5 sm:grid-cols-3">
-              <div className="rounded-2xl bg-bg p-6 transition-all hover:shadow-md min-h-[100px] flex flex-col justify-center">
-                <p className="text-4xl font-bold text-navy">8</p>
-                <p className="text-sm font-semibold uppercase text-text-muted">Specialties</p>
-              </div>
-              <div className="rounded-2xl bg-bg p-6 transition-all hover:shadow-md min-h-[100px] flex flex-col justify-center">
-                <p className="text-4xl font-bold text-navy">5</p>
-                <p className="text-sm font-semibold uppercase text-text-muted">Cities</p>
-              </div>
-              <div className="rounded-2xl bg-bg p-6 transition-all hover:shadow-md min-h-[100px] flex flex-col justify-center">
-                <p className="text-4xl font-bold text-navy">112</p>
-                <p className="text-sm font-semibold uppercase text-text-muted">Emergency</p>
-              </div>
-            </div>
-
-            <div className="mt-10 rounded-2xl border border-border bg-bg p-6">
-              <p className="text-sm font-semibold uppercase text-teal">How the route works</p>
-              <div className="mt-5 grid gap-4">
-                {['Describe symptoms', 'AI selects safe specialty', 'Doctors sorted by rating'].map((step, index) => (
-                  <div key={step} className="flex items-center gap-4 rounded-xl bg-white p-4 shadow-sm transition-all hover:shadow-md min-h-[60px]">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-navy text-base font-bold text-white">
-                      {index + 1}
-                    </span>
-                    <span className="text-base font-semibold text-navy">{step}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <p className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 px-6 py-4 text-base font-medium leading-7 text-amber-950">
-              Navigation support only. MediRoute never provides a definitive medical diagnosis.
-            </p>
-          </div>
-
-          <div className="rounded-3xl border border-border bg-white shadow-2xl shadow-navy/10">
-            <div className="flex items-center justify-between gap-6 border-b border-border px-10 py-8 min-h-[100px]">
-              <div>
-                <p className="text-xs font-semibold uppercase text-teal">Start a care route</p>
-                <h3 className="mt-2 text-3xl font-bold text-navy">Describe Your Symptoms</h3>
-              </div>
-              <div className="hidden rounded-2xl bg-bg px-6 py-4 text-right sm:block">
-                <p className="text-xs font-semibold uppercase text-text-muted">City</p>
-                <p className="text-base font-bold text-navy">{city}</p>
-              </div>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-8 p-10">
-              <div>
-                <label className="mb-3 block text-base font-semibold text-navy">Symptoms</label>
-                <div className="relative">
-                  <textarea
-                    value={symptomText}
-                    onChange={(e) => setSymptomText(e.target.value)}
-                    placeholder="Example: I have chest pain and difficulty breathing..."
-                    rows={7}
-                    className="min-h-48 w-full resize-none rounded-2xl border border-border bg-bg px-5 py-5 pr-16 text-lg text-text outline-none focus:border-teal focus:bg-white focus:ring-4 focus:ring-teal/10 transition-all"
-                    disabled={loading}
-                  />
-                  <button
-                    type="button"
-                    onClick={startListening}
-                    disabled={isListening || loading}
-                    className={`absolute right-4 top-4 flex h-12 w-12 items-center justify-center rounded-xl transition-all ${
-                      isListening
-                        ? 'bg-red-500 text-white animate-pulse'
-                        : 'bg-teal text-white hover:bg-teal-light'
-                    }`}
-                  >
-                    {isListening ? '🎤' : '🎤'}
-                  </button>
-                </div>
-              </div>
-
-              <div className="grid gap-6 md:grid-cols-[0.95fr_1.05fr]">
-                <div>
-                  <label className="mb-3 block text-base font-semibold text-navy">Current City</label>
-                  <select
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="h-16 w-full rounded-2xl border border-border bg-white px-5 py-4 text-lg font-semibold text-text outline-none focus:border-teal focus:ring-4 focus:ring-teal/10 transition-all"
-                    disabled={loading}
-                  >
-                    {cities.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <p className="mb-3 text-base font-semibold text-navy">Quick Symptoms</p>
-                  <div className="grid grid-cols-2 gap-4">
-                    {quickSymptoms.map((sample) => (
-                      <button
-                        key={sample.label}
-                        type="button"
-                        onClick={() => setSymptomText(sample.text)}
-                        className="rounded-xl border border-border bg-bg px-4 py-4 text-center text-sm font-semibold text-navy hover:border-teal hover:bg-teal/10 hover:text-teal transition-all hover:shadow-md min-h-[60px] flex items-center justify-center"
-                        disabled={loading}
-                      >
-                        {sample.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {error && (
-                <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-4">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">⚠️</span>
-                    <div className="flex-1">
-                      <div className="font-bold text-red-800 mb-1">AI Analysis Temporarily Unavailable</div>
-                      <div className="text-red-600 text-sm mb-3">{error}</div>
-                      <button
-                        onClick={() => {
-                          setError('')
-                          handleSubmit({ preventDefault: () => {} })
-                        }}
-                        className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-700 transition-all"
-                      >
-                        Try Again
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {loading ? (
-                <div className="rounded-2xl border border-border bg-white p-8 shadow-md">
-                  <div className="flex flex-col items-center text-center">
-                    <div className="mb-5">
-                      <div className="inline-block h-14 w-14 animate-spin rounded-full border-4 border-teal border-t-transparent"></div>
-                    </div>
-                    <div className="text-xl font-bold text-navy mb-3">{loadingPhase}</div>
-                    <div className="w-full max-w-sm bg-gray-200 rounded-full h-3 mb-4">
-                      <div
-                        className="bg-teal h-3 rounded-full transition-all duration-500"
-                        style={{ width: loadingPhase.includes('Analyzing') ? '45%' : '90%' }}
-                      ></div>
-                    </div>
-                    <div className="text-base font-medium text-text-muted">
-                      {loadingPhase.includes('Analyzing') ? 'AI is processing your symptoms...' : 'Finding the best doctors...'}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  type="submit"
-                  className="min-h-16 w-full rounded-2xl bg-teal px-6 py-5 text-lg font-semibold text-white shadow-xl shadow-teal/20 hover:bg-teal-light focus:outline-none focus:ring-4 focus:ring-teal/20 transition-all hover:shadow-2xl hover:scale-[1.02]"
-                >
-                  Find My Doctor
-                </button>
-              )}
-            </form>
-          </div>
+          <SearchForm 
+            symptomText={symptomText}
+            setSymptomText={setSymptomText}
+            city={city}
+            setCity={setCity}
+            loading={loading}
+            loadingPhase={loadingPhase}
+            error={error}
+            setError={setError}
+            onSubmit={handleSubmit}
+          />
         </section>
       </main>
 
+      <Footer />
+
       {showEmergencyModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy/70 p-6 backdrop-blur-md">
-          <div className="relative flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl shadow-navy/30">
-            <button
-              type="button"
-              onClick={() => setShowEmergencyModal(false)}
-              className="absolute right-6 top-6 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white text-2xl font-black text-red-600 shadow-lg hover:bg-red-50"
-              aria-label="Close emergency mode"
-            >
-              X
-            </button>
-
-            <div className="bg-red-600 px-10 py-8 pr-24 text-white">
-              <p className="text-sm font-semibold uppercase text-white/80">Emergency mode</p>
-              <h3 className="mt-3 text-4xl font-bold">Call 112 for critical symptoms</h3>
-              <p className="mt-3 max-w-2xl text-lg leading-7 text-white/90">
-                If symptoms are life-threatening, call the national emergency number immediately or visit the nearest emergency facility.
-              </p>
-              <a
-                href="tel:112"
-                className="mt-6 inline-flex rounded-2xl bg-white px-8 py-4 text-lg font-semibold text-red-600 shadow-md hover:bg-red-50 hover:text-red-700 transition-all hover:shadow-lg"
-              >
-                Call 112 Now
-              </a>
-            </div>
-
-            <div className="grid min-h-0 flex-1 gap-0 lg:grid-cols-[280px_1fr]">
-              <div className="border-b border-border bg-bg p-6 lg:border-b-0 lg:border-r">
-                <p className="mb-4 text-sm font-semibold uppercase text-text-muted">Choose city</p>
-                <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
-                  {cities.map((cityName) => (
-                    <button
-                      key={cityName}
-                      type="button"
-                      onClick={() => setEmergencyCity(cityName)}
-                      className={`rounded-xl px-5 py-4 text-left text-base font-semibold transition-all min-h-[60px] flex items-center ${
-                        emergencyCity === cityName
-                          ? 'bg-navy text-white shadow-md'
-                          : 'bg-white text-navy hover:bg-teal/10 hover:text-teal hover:shadow-md'
-                      }`}
-                    >
-                      {cityName}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="min-h-0 overflow-y-auto p-8 md:p-10">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                  <div>
-                    <p className="text-sm font-semibold uppercase text-teal">Emergency hospitals</p>
-                    <h4 className="text-3xl font-bold text-navy">{emergencyCity}</h4>
-                  </div>
-                  <p className="text-base font-medium text-text-muted">Verified emergency contacts for demo use</p>
-                </div>
-
-                <div className="mt-8 grid gap-6">
-                  {emergencyHospitals[emergencyCity].map((hosp, index) => (
-                    <div key={hosp.name} className="rounded-2xl border border-border bg-bg p-6 min-h-[120px] flex items-center">
-                      <div className="flex gap-5 w-full">
-                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-600 text-base font-bold text-white">
-                          {index + 1}
-                        </span>
-                        <div className="flex-1">
-                          <h5 className="text-xl font-semibold text-navy overflow-hidden text-ellipsis">{hosp.name}</h5>
-                          <p className="mt-2 text-base text-text-muted overflow-hidden text-ellipsis">{hosp.location}</p>
-                          <a
-                            href={`tel:${hosp.phone.replace(/-/g, '')}`}
-                            className="mt-4 inline-flex rounded-xl bg-white px-5 py-3 text-base font-semibold text-teal shadow-sm hover:text-teal-light transition-all hover:shadow-md"
-                          >
-                            {hosp.phone}
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <EmergencyModal 
+          emergencyCity={emergencyCity}
+          setEmergencyCity={setEmergencyCity}
+          onClose={() => setShowEmergencyModal(false)}
+        />
       )}
-
-      <footer className="border-t border-border bg-white px-5 py-4 text-center text-xs font-semibold text-text-muted">
-        MediRoute MVP - Bharat Academix CodeQuest 2026. Navigation support only, not clinical diagnosis.
-      </footer>
     </div>
   )
 }

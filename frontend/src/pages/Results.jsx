@@ -1,21 +1,11 @@
 import { useLocation, Link } from 'react-router-dom'
-import { useState } from 'react'
+import Footer from '../components/layout/Footer'
+import DoctorCard from '../components/results/DoctorCard'
 
 function Results() {
-  const [selectedForComparison, setSelectedForComparison] = useState([])
-
-  const toggleComparison = (doctor) => {
-    if (selectedForComparison.find(d => d.id === doctor.id)) {
-      setSelectedForComparison(selectedForComparison.filter(d => d.id !== doctor.id))
-    } else if (selectedForComparison.length < 3) {
-      setSelectedForComparison([...selectedForComparison, doctor])
-    }
-  }
   const location = useLocation()
   let { city, triageData, searchData } = location.state || {}
 
-  // Fall back to sessionStorage if router state is missing
-  // (e.g. the user refreshed the page, or opened the URL fresh)
   if (!triageData || !searchData) {
     try {
       const stored = sessionStorage.getItem('mediroute_results')
@@ -55,17 +45,6 @@ function Results() {
 
   const confidenceColor = confidence >= 90 ? 'text-green-600' :
                          confidence >= 80 ? 'text-yellow-600' : 'text-red-600'
-
-  const getAvailability = (doctor) => {
-    const hours = new Date().getHours()
-    if (hours >= 9 && hours <= 17) {
-      return { status: 'Available Today (Demo)', color: 'text-green-600', bg: 'bg-green-100' }
-    } else if (hours >= 18 && hours <= 21) {
-      return { status: 'Available Evening (Demo)', color: 'text-yellow-600', bg: 'bg-yellow-100' }
-    } else {
-      return { status: 'Next: Tomorrow 9AM (Demo)', color: 'text-gray-600', bg: 'bg-gray-100' }
-    }
-  }
 
   const emergencyHospitals = {
     Delhi: [
@@ -160,9 +139,9 @@ function Results() {
   }
 
   return (
-    <div className="min-h-screen bg-bg font-sans text-text">
+    <div className="min-h-screen bg-bg font-sans text-text flex flex-col">
       <header className="sticky top-0 z-40 border-b border-white/10 bg-navy shadow-lg">
-        <div className="flex items-center justify-between px-6 py-4">
+        <div className="flex items-center justify-between max-w-7xl mx-auto px-6 py-4">
           <Link to="/" className="flex items-center gap-3 text-white hover:text-white">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-2xl font-bold text-teal shadow-md">
               +
@@ -184,7 +163,7 @@ function Results() {
         </div>
       </header>
 
-      <main className="w-full px-6 py-10 lg:py-12">
+      <main className="w-full max-w-7xl mx-auto px-6 py-10 lg:py-12 flex-1">
         {urgency === 'high' && (
           <section className="mb-6 rounded-3xl border border-red-200 bg-red-600 p-5 text-white shadow-xl shadow-red-950/10">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -217,7 +196,7 @@ function Results() {
                     </div>
                   </div>
                   <p className="mb-3 text-right text-[11px] font-bold uppercase text-text-muted">
-                    Demo confidence score — illustrative, not a real model metric
+                    AI-estimated confidence based on symptom clarity
                   </p>
                   <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
                     <div
@@ -252,28 +231,6 @@ function Results() {
               </div>
             </section>
 
-            {results.length > 0 && (
-              <section className="overflow-hidden rounded-3xl border border-border bg-white shadow-xl shadow-navy/5">
-                <div className="p-8 md:p-10 min-h-[200px] flex flex-col justify-center">
-                  <p className="text-xs font-semibold uppercase text-teal">Doctor locations</p>
-                  <h2 className="mt-3 text-2xl font-bold text-navy">Map View</h2>
-                  <div className="mt-6 rounded-2xl border border-border bg-bg p-4">
-                    <a
-                      href={`https://www.google.com/maps/search/${encodeURIComponent(results.map(d => `${d.name} ${d.city}`).join(' '))}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-3 rounded-xl bg-navy px-6 py-4 text-base font-semibold text-white shadow-md hover:bg-navy-light transition-all hover:shadow-lg"
-                    >
-                      <span className="text-2xl">🗺️</span>
-                      Open in Google Maps
-                    </a>
-                    <p className="mt-3 text-center text-sm font-medium text-text-muted">
-                      View all doctor locations on Google Maps
-                    </p>
-                  </div>
-                </div>
-              </section>
-            )}
 
             <section className="space-y-4">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -295,64 +252,7 @@ function Results() {
               <div className="grid gap-5">
                 {results.length > 0 ? (
                   results.slice(0, 5).map((doc, index) => (
-                    <article
-                      key={doc.id}
-                      className="rounded-3xl border border-border bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-navy/10 md:p-7 min-h-[140px] flex items-center"
-                    >
-                      <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-                        <div className="flex gap-4">
-                          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-navy text-xl font-bold text-white shadow-md">
-                            {index + 1}
-                          </div>
-                          <div>
-                            <div className="flex flex-wrap items-center gap-2">
-                              <h3 className="text-[22px] font-bold leading-tight text-navy overflow-hidden text-ellipsis">{doc.name}</h3>
-                              {doc.nmcVerified && (
-                                <span className="rounded-full bg-green-100 px-3 py-1 text-[11px] font-semibold uppercase text-green-700">
-                                  NMC Verified
-                                </span>
-                              )}
-                            </div>
-                            <p className="mt-1 text-base font-semibold text-teal">{doc.specialty}</p>
-                            {(() => {
-                              const availability = getAvailability(doc)
-                              return (
-                                <div className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold ${availability.bg} ${availability.color}`}>
-                                  {availability.status}
-                                </div>
-                              )
-                            })()}
-                          <div className="mt-4 flex flex-wrap gap-3 text-sm">
-                              <span className="rounded-xl bg-bg px-3 py-2 font-semibold text-navy">
-                                Rating {doc.rating}/5.0
-                              </span>
-                              <span className="rounded-xl bg-bg px-3 py-2 font-semibold text-navy">
-                                Rs. {doc.feeRangeMin} - Rs. {doc.feeRangeMax}
-                              </span>
-                            </div>
-                            <button
-                              onClick={() => toggleComparison(doc)}
-                              className={`mt-3 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-                                selectedForComparison.find(d => d.id === doc.id)
-                                  ? 'bg-teal text-white'
-                                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                              }`}
-                            >
-                              {selectedForComparison.find(d => d.id === doc.id) ? '✓ Selected' : '+ Compare'}
-                            </button>
-                          </div>
-                        </div>
-
-                        <a
-                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(doc.name)}+${encodeURIComponent(doc.specialty)}+${encodeURIComponent(doc.city)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-2xl bg-navy px-5 py-3 text-sm font-semibold uppercase text-white shadow-md hover:bg-navy-light hover:text-white transition-all hover:shadow-lg"
-                        >
-                          Get Directions
-                        </a>
-                      </div>
-                    </article>
+                    <DoctorCard key={doc.id} doc={doc} index={index} />
                   ))
                 ) : (
                   <div className="rounded-3xl border border-border bg-white p-8 text-center text-text-muted shadow-sm">
@@ -401,69 +301,7 @@ function Results() {
         </section>
       </main>
 
-      <footer className="border-t border-border bg-white px-5 py-4 text-center text-xs font-semibold text-text-muted">
-        MediRoute MVP - Bharat Academix CodeQuest 2026. All recommendations are advisory.
-      </footer>
-
-      {selectedForComparison.length >= 2 && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy/70 p-5 backdrop-blur-md">
-          <div className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl shadow-navy/30">
-            <button
-              type="button"
-              onClick={() => setSelectedForComparison([])}
-              className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl font-bold text-red-600 shadow-lg hover:bg-red-50 transition-all hover:scale-110"
-            >
-              ×
-            </button>
-
-            <div className="bg-navy px-7 py-6 pr-20 text-white">
-              <p className="text-xs font-semibold uppercase text-white/80">Compare doctors</p>
-              <h3 className="mt-2 text-3xl font-bold">Side-by-side comparison</h3>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {selectedForComparison.map(doctor => (
-                  <div key={doctor.id} className="border rounded-xl p-4">
-                    <h3 className="font-semibold text-navy mb-2">{doctor.name}</h3>
-
-                    <div className="mb-4">
-                      <div className="text-sm text-gray-600 mb-1">Rating</div>
-                      <div className="flex items-center">
-                        <div className="flex-1 bg-gray-200 rounded-full h-3 mr-2">
-                          <div
-                            className="bg-teal h-3 rounded-full"
-                            style={{ width: `${(doctor.rating / 5) * 100}%` }}
-                          ></div>
-                        </div>
-                        <span className="font-semibold">{doctor.rating}</span>
-                      </div>
-                    </div>
-
-                    <div className="mb-4">
-                      <div className="text-sm text-gray-600 mb-1">Fee Range</div>
-                      <div className="font-semibold text-teal">
-                        ₹{doctor.feeRangeMin} - ₹{doctor.feeRangeMax}
-                      </div>
-                    </div>
-
-                    <div className="mb-4">
-                      <div className="text-sm text-gray-600 mb-1">NMC Verified</div>
-                      <div className={doctor.nmcVerified ? 'text-green-600' : 'text-red-600'}>
-                        {doctor.nmcVerified ? '✓ Verified' : '✗ Not Verified'}
-                      </div>
-                    </div>
-
-                    <button className="w-full bg-navy text-white py-2 rounded-lg hover:bg-navy-light transition-all hover:shadow-md">
-                      View Details
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <Footer />
     </div>
   )
 }

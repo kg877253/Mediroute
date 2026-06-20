@@ -45,3 +45,8 @@ Delhi, Mumbai, Jaipur, Goa, Bangalore
 - Every backend route must be defensive: wrap external calls (especially Gemini) in try/catch and return a sensible fallback JSON, never let a route 500 with no response.
 - Comment any non-obvious logic, especially the specialty-fallback search — the developer needs to be able to explain every line to hackathon judges in a live Q&A.
 - Keep PRs/commits scoped to one feature at a time so it's easy to tell what changed.
+- Never fabricate or hardcode statistics presented as live/real data (user counts, search
+  trends, etc.) without clearly labeling them as illustrative/demo, matching the existing
+  confidence-score disclaimer pattern.
+- Every interactive button or link must have a working handler. Never add a button with
+  no real destination or function.

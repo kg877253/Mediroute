@@ -29,12 +29,16 @@ const SYSTEM_INSTRUCTION =
   "description, determine: 1) the single most appropriate specialty from EXACTLY this list: " +
   '["General Physician", "Cardiologist", "Dermatologist", "Orthopedic", ' +
   '"Pediatrician", "ENT Specialist", "Gynecologist", "Dentist"], 2) urgency as ' +
-  'exactly "low", "medium", or "high", 3) a one-sentence reasoning in plain language. ' +
+  'exactly "low", "medium", or "high", 3) a one-sentence reasoning in plain language, ' +
+  '4) a confidence integer from 0 to 100 estimating how clearly the symptoms map to one ' +
+  'specialty — specific, textbook symptoms like "chest pain and shortness of breath" should ' +
+  'score 85-95, moderately clear symptoms 60-80, and vague descriptions like "I don\'t feel ' +
+  'well" should score 30-55. ' +
   "This is navigation, not diagnosis — never state a definitive diagnosis, only recommend " +
   "which type of doctor to see. If symptoms suggest a medical emergency (chest pain, " +
   'difficulty breathing, severe bleeding, loss of consciousness), set urgency to "high". ' +
   "Respond with ONLY valid JSON, no markdown code fences, no extra text: " +
-  '{"specialty": "...", "urgency": "...", "reasoning": "..."}';
+  '{"specialty": "...", "urgency": "...", "reasoning": "...", "confidence": <0-100>}';
 
 /**
  * POST /api/triage
@@ -89,11 +93,17 @@ router.post("/", async (req, res) => {
       parsed.reasoning = FALLBACK.reasoning;
     }
 
+    // Validate the AI-estimated confidence score: must be an integer 0-100.
+    // Default to 70 (moderate confidence) if missing or non-numeric.
+    let confidence = typeof parsed.confidence === "number" ? parsed.confidence : 70;
+    confidence = Math.round(confidence);
+    confidence = Math.max(0, Math.min(100, confidence));
+
     return res.json({
       specialty: parsed.specialty,
       urgency: parsed.urgency,
       reasoning: parsed.reasoning.trim(),
-      confidence: Math.floor(Math.random() * 15) + 85, // Demo-only score, not a real model metric
+      confidence,
       fallbackUsed: false,
     });
   } catch (err) {
