@@ -236,7 +236,7 @@ function Results() {
             {/* Doctors Grid */}
             <div className="space-y-4">
               {results.length > 0 ? (
-                results.map((doc) => (
+                results.slice(0, 5).map((doc) => (
                   <div key={doc.id} className="bg-white border border-border/80 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-5">
                     
                     {/* Doctor Info */}

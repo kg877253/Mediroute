@@ -8,16 +8,15 @@
   --color-teal: #028090;
   --color-teal-light: #03a3b8;
   --color-teal-dark: #016570;
-  --color-bg: #ffffff;
-  --color-bg-soft: #f4f6fb;
+  --color-bg: #f8fafc;
+  --color-bg-soft: #f1f5f9;
   --color-text: #1E2761;
   --color-text-muted: #5a6178;
   --color-border: #e2e5ef;
   --color-danger: #dc2626;
   --color-success: #16a34a;
   --color-warning: #f59e0b;
-
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: "Inter", sans-serif;
 }
 
 /* ── Base Resets ─────────────────────────────────────────── */

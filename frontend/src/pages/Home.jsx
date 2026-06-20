@@ -117,11 +117,11 @@ function Home() {
       </header>
 
       {/* ── Main Landing Section ──────────────────────────────── */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-12 md:py-16 max-w-5xl mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-8 max-w-6xl mx-auto w-full min-h-[calc(100vh-80px)]">
+        <div className="flex flex-col lg:flex-row items-center justify-between w-full gap-12 lg:gap-8">
           
           {/* Left Column: Copy & Brand pitch */}
-          <div className="lg:col-span-5 text-left space-y-6">
+          <div className="lg:w-[50%] text-left space-y-6">
             <span className="inline-flex items-center bg-teal/15 text-teal text-xs font-semibold px-3 py-1 rounded-full">
               ✨ Powered by Gemini 2.5 Flash
             </span>
@@ -148,19 +148,27 @@ function Home() {
             </div>
           </div>
 
-          {/* Right Column: Dynamic Form Card */}
-          <div className="lg:col-span-7 bg-white border border-border/80 rounded-2xl p-6 md:p-8 shadow-xl relative overflow-hidden">
-            {/* Soft decorative background accents */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-teal/5 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-navy/5 rounded-full blur-3xl pointer-events-none" />
+          {/* Right Column: Dynamic Form Card & Decoration */}
+          <div className="lg:w-[50%] flex justify-center lg:justify-end relative w-full">
+            
+            {/* Medical Icon Illustration Background */}
+            <div className="hidden lg:flex absolute top-1/2 left-1/4 transform -translate-y-1/2 -translate-x-1/2 text-[240px] opacity-[0.02] pointer-events-none z-0">
+              🩺
+            </div>
 
-            <h3 className="text-xl font-bold text-navy mb-5 flex items-center space-x-2">
-              <span>🩺</span>
-              <span>Describe Your Symptoms</span>
-            </h3>
+            {/* The Form Card */}
+            <div className="w-full max-w-[480px] bg-white border border-border/80 rounded-2xl p-6 md:p-8 shadow-xl relative z-10 overflow-hidden">
+              {/* Soft decorative background accents */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-teal/5 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-navy/5 rounded-full blur-3xl pointer-events-none" />
 
-            <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
-              {/* Symptom input */}
+              <h3 className="text-xl font-bold text-navy mb-5 flex items-center space-x-2 relative z-10">
+                <span>🩺</span>
+                <span>Describe Your Symptoms</span>
+              </h3>
+
+              <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+                {/* Symptom input */}
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-navy">
                   What issues or symptoms are you experiencing?
@@ -226,6 +234,7 @@ function Home() {
                 )}
               </div>
             </form>
+            </div>
           </div>
         </div>
       </main>
