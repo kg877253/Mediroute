@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+/* ── MediRoute Brand Tokens ─────────────────────────────── */
+@theme {
+  --color-navy: #1E2761;
+  --color-navy-light: #2a3578;
+  --color-navy-dark: #151c4a;
+  --color-teal: #028090;
+  --color-teal-light: #03a3b8;
+  --color-teal-dark: #016570;
+  --color-bg: #ffffff;
+  --color-bg-soft: #f4f6fb;
+  --color-text: #1E2761;
+  --color-text-muted: #5a6178;
+  --color-border: #e2e5ef;
+  --color-danger: #dc2626;
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ── Base Resets ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Smooth transitions globally ────────────────────────── */
+a, button, input, textarea {
+  transition: all 0.2s ease;
+}
+
+a {
+  color: var(--color-teal);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-teal-light);
+}

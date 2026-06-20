@@ -1,0 +1,406 @@
+[
+  {
+    "id": "DEL-001",
+    "name": "Dr. Arvind Sharma",
+    "specialty": "General Physician",
+    "city": "Delhi",
+    "feeRangeMin": 300,
+    "feeRangeMax": 600,
+    "rating": 4.5,
+    "nmcVerified": true
+  },
+  {
+    "id": "DEL-002",
+    "name": "Dr. Meena Kapoor",
+    "specialty": "Cardiologist",
+    "city": "Delhi",
+    "feeRangeMin": 800,
+    "feeRangeMax": 1500,
+    "rating": 4.8,
+    "nmcVerified": true
+  },
+  {
+    "id": "DEL-003",
+    "name": "Dr. Rohit Malhotra",
+    "specialty": "Dermatologist",
+    "city": "Delhi",
+    "feeRangeMin": 500,
+    "feeRangeMax": 1000,
+    "rating": 4.3,
+    "nmcVerified": true
+  },
+  {
+    "id": "DEL-004",
+    "name": "Dr. Sunita Verma",
+    "specialty": "Orthopedic",
+    "city": "Delhi",
+    "feeRangeMin": 600,
+    "feeRangeMax": 1200,
+    "rating": 4.6,
+    "nmcVerified": true
+  },
+  {
+    "id": "DEL-005",
+    "name": "Dr. Vikram Choudhary",
+    "specialty": "Pediatrician",
+    "city": "Delhi",
+    "feeRangeMin": 400,
+    "feeRangeMax": 800,
+    "rating": 4.7,
+    "nmcVerified": true
+  },
+  {
+    "id": "DEL-006",
+    "name": "Dr. Priya Nair",
+    "specialty": "ENT Specialist",
+    "city": "Delhi",
+    "feeRangeMin": 500,
+    "feeRangeMax": 900,
+    "rating": 4.2,
+    "nmcVerified": true
+  },
+  {
+    "id": "DEL-007",
+    "name": "Dr. Anjali Gupta",
+    "specialty": "Gynecologist",
+    "city": "Delhi",
+    "feeRangeMin": 600,
+    "feeRangeMax": 1100,
+    "rating": 4.9,
+    "nmcVerified": true
+  },
+  {
+    "id": "DEL-008",
+    "name": "Dr. Rajeev Tandon",
+    "specialty": "Dentist",
+    "city": "Delhi",
+    "feeRangeMin": 300,
+    "feeRangeMax": 700,
+    "rating": 4.1,
+    "nmcVerified": false
+  },
+
+  {
+    "id": "MUM-001",
+    "name": "Dr. Sanjay Deshmukh",
+    "specialty": "General Physician",
+    "city": "Mumbai",
+    "feeRangeMin": 400,
+    "feeRangeMax": 800,
+    "rating": 4.4,
+    "nmcVerified": true
+  },
+  {
+    "id": "MUM-002",
+    "name": "Dr. Kavita Joshi",
+    "specialty": "Cardiologist",
+    "city": "Mumbai",
+    "feeRangeMin": 1000,
+    "feeRangeMax": 1500,
+    "rating": 4.9,
+    "nmcVerified": true
+  },
+  {
+    "id": "MUM-003",
+    "name": "Dr. Nikhil Patil",
+    "specialty": "Dermatologist",
+    "city": "Mumbai",
+    "feeRangeMin": 600,
+    "feeRangeMax": 1200,
+    "rating": 4.6,
+    "nmcVerified": true
+  },
+  {
+    "id": "MUM-004",
+    "name": "Dr. Rekha Menon",
+    "specialty": "Orthopedic",
+    "city": "Mumbai",
+    "feeRangeMin": 700,
+    "feeRangeMax": 1300,
+    "rating": 4.3,
+    "nmcVerified": true
+  },
+  {
+    "id": "MUM-005",
+    "name": "Dr. Amol Kulkarni",
+    "specialty": "Pediatrician",
+    "city": "Mumbai",
+    "feeRangeMin": 500,
+    "feeRangeMax": 900,
+    "rating": 4.7,
+    "nmcVerified": true
+  },
+  {
+    "id": "MUM-006",
+    "name": "Dr. Deepa Bhatt",
+    "specialty": "ENT Specialist",
+    "city": "Mumbai",
+    "feeRangeMin": 600,
+    "feeRangeMax": 1000,
+    "rating": 4.5,
+    "nmcVerified": true
+  },
+  {
+    "id": "MUM-007",
+    "name": "Dr. Sneha Pawar",
+    "specialty": "Gynecologist",
+    "city": "Mumbai",
+    "feeRangeMin": 700,
+    "feeRangeMax": 1200,
+    "rating": 4.8,
+    "nmcVerified": true
+  },
+  {
+    "id": "MUM-008",
+    "name": "Dr. Harsh Mehta",
+    "specialty": "Dentist",
+    "city": "Mumbai",
+    "feeRangeMin": 400,
+    "feeRangeMax": 900,
+    "rating": 4.0,
+    "nmcVerified": false
+  },
+
+  {
+    "id": "JAI-001",
+    "name": "Dr. Manish Shekhawat",
+    "specialty": "General Physician",
+    "city": "Jaipur",
+    "feeRangeMin": 200,
+    "feeRangeMax": 500,
+    "rating": 4.3,
+    "nmcVerified": true
+  },
+  {
+    "id": "JAI-002",
+    "name": "Dr. Pooja Rathore",
+    "specialty": "Cardiologist",
+    "city": "Jaipur",
+    "feeRangeMin": 700,
+    "feeRangeMax": 1300,
+    "rating": 4.6,
+    "nmcVerified": true
+  },
+  {
+    "id": "JAI-003",
+    "name": "Dr. Aditya Mathur",
+    "specialty": "Dermatologist",
+    "city": "Jaipur",
+    "feeRangeMin": 400,
+    "feeRangeMax": 800,
+    "rating": 4.1,
+    "nmcVerified": true
+  },
+  {
+    "id": "JAI-004",
+    "name": "Dr. Nandini Saxena",
+    "specialty": "Orthopedic",
+    "city": "Jaipur",
+    "feeRangeMin": 500,
+    "feeRangeMax": 1000,
+    "rating": 4.4,
+    "nmcVerified": true
+  },
+  {
+    "id": "JAI-005",
+    "name": "Dr. Rajendra Purohit",
+    "specialty": "Pediatrician",
+    "city": "Jaipur",
+    "feeRangeMin": 300,
+    "feeRangeMax": 600,
+    "rating": 4.5,
+    "nmcVerified": true
+  },
+  {
+    "id": "JAI-006",
+    "name": "Dr. Divya Chauhan",
+    "specialty": "ENT Specialist",
+    "city": "Jaipur",
+    "feeRangeMin": 400,
+    "feeRangeMax": 700,
+    "rating": 3.9,
+    "nmcVerified": true
+  },
+  {
+    "id": "JAI-007",
+    "name": "Dr. Shalini Agarwal",
+    "specialty": "Gynecologist",
+    "city": "Jaipur",
+    "feeRangeMin": 500,
+    "feeRangeMax": 900,
+    "rating": 4.7,
+    "nmcVerified": true
+  },
+  {
+    "id": "JAI-008",
+    "name": "Dr. Kunal Bhargava",
+    "specialty": "Dentist",
+    "city": "Jaipur",
+    "feeRangeMin": 200,
+    "feeRangeMax": 500,
+    "rating": 3.8,
+    "nmcVerified": false
+  },
+
+  {
+    "id": "GOA-001",
+    "name": "Dr. Suresh Naik",
+    "specialty": "General Physician",
+    "city": "Goa",
+    "feeRangeMin": 300,
+    "feeRangeMax": 600,
+    "rating": 4.2,
+    "nmcVerified": true
+  },
+  {
+    "id": "GOA-002",
+    "name": "Dr. Fernanda D'Souza",
+    "specialty": "Cardiologist",
+    "city": "Goa",
+    "feeRangeMin": 800,
+    "feeRangeMax": 1400,
+    "rating": 4.7,
+    "nmcVerified": true
+  },
+  {
+    "id": "GOA-003",
+    "name": "Dr. Priyanka Kamat",
+    "specialty": "Dermatologist",
+    "city": "Goa",
+    "feeRangeMin": 500,
+    "feeRangeMax": 900,
+    "rating": 4.4,
+    "nmcVerified": true
+  },
+  {
+    "id": "GOA-004",
+    "name": "Dr. Ramesh Prabhu",
+    "specialty": "Orthopedic",
+    "city": "Goa",
+    "feeRangeMin": 600,
+    "feeRangeMax": 1100,
+    "rating": 4.0,
+    "nmcVerified": true
+  },
+  {
+    "id": "GOA-005",
+    "name": "Dr. Anita Shetty",
+    "specialty": "Pediatrician",
+    "city": "Goa",
+    "feeRangeMin": 350,
+    "feeRangeMax": 700,
+    "rating": 4.6,
+    "nmcVerified": true
+  },
+  {
+    "id": "GOA-006",
+    "name": "Dr. Vivek Sinai",
+    "specialty": "ENT Specialist",
+    "city": "Goa",
+    "feeRangeMin": 400,
+    "feeRangeMax": 800,
+    "rating": 4.1,
+    "nmcVerified": false
+  },
+  {
+    "id": "GOA-007",
+    "name": "Dr. Madhavi Rane",
+    "specialty": "Gynecologist",
+    "city": "Goa",
+    "feeRangeMin": 500,
+    "feeRangeMax": 1000,
+    "rating": 4.5,
+    "nmcVerified": true
+  },
+  {
+    "id": "GOA-008",
+    "name": "Dr. Nilesh Chari",
+    "specialty": "Dentist",
+    "city": "Goa",
+    "feeRangeMin": 250,
+    "feeRangeMax": 550,
+    "rating": 3.9,
+    "nmcVerified": true
+  },
+
+  {
+    "id": "BLR-001",
+    "name": "Dr. Karthik Raghavan",
+    "specialty": "General Physician",
+    "city": "Bangalore",
+    "feeRangeMin": 400,
+    "feeRangeMax": 700,
+    "rating": 4.5,
+    "nmcVerified": true
+  },
+  {
+    "id": "BLR-002",
+    "name": "Dr. Lakshmi Iyer",
+    "specialty": "Cardiologist",
+    "city": "Bangalore",
+    "feeRangeMin": 900,
+    "feeRangeMax": 1500,
+    "rating": 5.0,
+    "nmcVerified": true
+  },
+  {
+    "id": "BLR-003",
+    "name": "Dr. Naveen Hegde",
+    "specialty": "Dermatologist",
+    "city": "Bangalore",
+    "feeRangeMin": 500,
+    "feeRangeMax": 1000,
+    "rating": 4.4,
+    "nmcVerified": true
+  },
+  {
+    "id": "BLR-004",
+    "name": "Dr. Swathi Reddy",
+    "specialty": "Orthopedic",
+    "city": "Bangalore",
+    "feeRangeMin": 700,
+    "feeRangeMax": 1200,
+    "rating": 4.6,
+    "nmcVerified": true
+  },
+  {
+    "id": "BLR-005",
+    "name": "Dr. Prashanth Rao",
+    "specialty": "Pediatrician",
+    "city": "Bangalore",
+    "feeRangeMin": 400,
+    "feeRangeMax": 800,
+    "rating": 4.8,
+    "nmcVerified": true
+  },
+  {
+    "id": "BLR-006",
+    "name": "Dr. Divya Krishnamurthy",
+    "specialty": "ENT Specialist",
+    "city": "Bangalore",
+    "feeRangeMin": 500,
+    "feeRangeMax": 900,
+    "rating": 4.3,
+    "nmcVerified": true
+  },
+  {
+    "id": "BLR-007",
+    "name": "Dr. Asha Srinivasan",
+    "specialty": "Gynecologist",
+    "city": "Bangalore",
+    "feeRangeMin": 600,
+    "feeRangeMax": 1100,
+    "rating": 4.7,
+    "nmcVerified": true
+  },
+  {
+    "id": "BLR-008",
+    "name": "Dr. Gautam Bhat",
+    "specialty": "Dentist",
+    "city": "Bangalore",
+    "feeRangeMin": 300,
+    "feeRangeMax": 650,
+    "rating": 4.2,
+    "nmcVerified": false
+  }
+]

@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Production Build Output
+frontend/dist/
+frontend/build/
+
+# Environment Variables & Keys (DO NOT COMMIT THESE)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/.env
+frontend/.env
+
+# Editor / System Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+.DS_Store
+Thumbs.db
