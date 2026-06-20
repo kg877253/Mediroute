@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 function Home() {
   const [symptomText, setSymptomText] = useState('')
   const [city, setCity] = useState('Delhi')
+  const [emergencyCity, setEmergencyCity] = useState('Delhi')
   const [loading, setLoading] = useState(false)
   const [loadingPhase, setLoadingPhase] = useState('')
   const [error, setError] = useState('')
@@ -11,10 +12,14 @@ function Home() {
   const navigate = useNavigate()
   const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
-  // Whitelisted cities
   const cities = ['Delhi', 'Mumbai', 'Jaipur', 'Goa', 'Bangalore']
+  const demoSymptoms = [
+    { label: 'Chest pain', text: 'I have chest pain and difficulty breathing' },
+    { label: 'Skin rash', text: 'I have an itchy skin rash on my arm' },
+    { label: 'Tooth pain', text: 'My tooth hurts badly when I eat' },
+    { label: 'Child fever', text: 'My child has fever and cough' }
+  ]
 
-  // Whitelisted emergency hospitals by city
   const emergencyHospitals = {
     Delhi: [
       { name: 'AIIMS Emergency Department', phone: '011-26588500', location: 'Ansari Nagar, New Delhi' },
@@ -43,18 +48,23 @@ function Home() {
     ]
   }
 
+  const openEmergencyMode = () => {
+    setEmergencyCity(city)
+    setShowEmergencyModal(true)
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!symptomText.trim()) {
       setError('Please describe your symptoms first.')
       return
     }
+
     setError('')
     setLoading(true)
 
     try {
-      // Phase 1: Gemini Triage
-      setLoadingPhase('Analyzing symptoms with Gemini AI...')
+      setLoadingPhase('Analyzing symptoms with Gemini AI')
       const triageRes = await fetch(`${apiBaseUrl}/api/triage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -70,8 +80,7 @@ function Home() {
         throw new Error('Triage response did not include a specialty.')
       }
 
-      // Phase 2: Doctor Search
-      setLoadingPhase('Finding verified doctors near you...')
+      setLoadingPhase('Finding verified doctors near you')
       const searchRes = await fetch(`${apiBaseUrl}/api/search`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -86,7 +95,6 @@ function Home() {
         throw new Error(searchData.error || 'Doctor search failed.')
       }
 
-      // Navigate to results page with data
       navigate('/results', {
         state: {
           symptomText,
@@ -105,107 +113,112 @@ function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-bg flex flex-col font-sans">
-      {/* ── Navigation Header ─────────────────────────────────── */}
-      <header className="bg-navy text-white py-5 px-6 shadow-md border-b border-navy-light sticky top-0 z-40">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <span className="text-3xl">🏥</span>
+    <div className="min-h-screen bg-bg font-sans text-text">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-navy shadow-lg">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-2xl font-black text-teal shadow-md">
+              +
+            </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">
+              <h1 className="text-2xl font-black leading-none text-white">
                 Medi<span className="text-teal-light">Route</span>
               </h1>
-              <p className="text-xs text-white/70 font-medium">
-                Right doctor. Right cost. Right now.
-              </p>
+              <p className="mt-1 text-xs font-semibold text-white/70">Right doctor. Right cost. Right now.</p>
             </div>
           </div>
+
           <button
-            onClick={() => setShowEmergencyModal(true)}
-            className="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded-lg transition-all shadow-md animate-pulse"
+            type="button"
+            onClick={openEmergencyMode}
+            className="rounded-xl bg-red-600 px-5 py-3 text-xs font-black uppercase text-white shadow-lg shadow-red-950/20 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-200"
           >
-            🚨 Emergency Mode
+            Emergency Mode
           </button>
         </div>
       </header>
 
-      {/* ── Main Landing Section ──────────────────────────────── */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-8 max-w-6xl mx-auto w-full min-h-[calc(100vh-80px)]">
-        <div className="flex flex-col lg:flex-row items-center justify-between w-full gap-12 lg:gap-8">
-          
-          {/* Left Column: Copy & Brand pitch */}
-          <div className="lg:w-[50%] text-left space-y-6">
-            <span className="inline-flex items-center bg-teal/15 text-teal text-xs font-semibold px-3 py-1 rounded-full">
-              ✨ Powered by Gemini 2.5 Flash
-            </span>
-            <h2 className="text-4xl md:text-5xl font-black text-navy leading-tight tracking-tight">
-              Get Matched to the Right Specialist in <span className="text-teal">Seconds</span>.
+      <main className="mx-auto w-full max-w-[1180px] px-8 py-10 lg:py-14">
+        <section className="grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="rounded-3xl border border-border bg-white p-8 shadow-xl shadow-navy/5 md:p-10">
+            <div className="inline-flex rounded-full border border-teal/20 bg-teal/10 px-3 py-1 text-xs font-black uppercase text-teal">
+              Gemini 2.5 Flash triage navigation
+            </div>
+
+            <h2 className="mt-6 text-4xl font-black leading-tight text-navy md:text-[44px]">
+              Find the right specialist in under 60 seconds.
             </h2>
-            <p className="text-text-muted text-base leading-relaxed">
-              Describe your symptoms naturally, choose your city, and our AI triage agent will guide you to the correct department with transparent pricing and real-time directions.
+
+            <p className="mt-5 max-w-2xl text-base leading-8 text-text-muted">
+              MediRoute turns symptoms into a safe care route: specialty, urgency, verified doctors, fee range, and emergency guidance.
             </p>
-            
-            <div className="pt-2 flex flex-col space-y-3">
-              <div className="flex items-center space-x-3 text-sm text-text">
-                <span className="text-teal font-bold text-lg">✓</span>
-                <span>Whitelisted clinical triage navigation</span>
+
+            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+              <div className="rounded-2xl bg-bg p-4">
+                <p className="text-3xl font-black text-navy">8</p>
+                <p className="text-xs font-black uppercase text-text-muted">Specialties</p>
               </div>
-              <div className="flex items-center space-x-3 text-sm text-text">
-                <span className="text-teal font-bold text-lg">✓</span>
-                <span>Verified doctor listings with ratings & pricing</span>
+              <div className="rounded-2xl bg-bg p-4">
+                <p className="text-3xl font-black text-navy">5</p>
+                <p className="text-xs font-black uppercase text-text-muted">Cities</p>
               </div>
-              <div className="flex items-center space-x-3 text-sm text-text">
-                <span className="text-teal font-bold text-lg">✓</span>
-                <span>Zero diagnostic claims (strict safety filtering)</span>
+              <div className="rounded-2xl bg-bg p-4">
+                <p className="text-3xl font-black text-navy">112</p>
+                <p className="text-xs font-black uppercase text-text-muted">Emergency</p>
               </div>
             </div>
+
+            <div className="mt-8 rounded-2xl border border-border bg-bg p-5">
+              <p className="text-xs font-black uppercase text-teal">How the route works</p>
+              <div className="mt-4 grid gap-3">
+                {['Describe symptoms', 'AI selects safe specialty', 'Doctors sorted by rating'].map((step, index) => (
+                  <div key={step} className="flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy text-sm font-black text-white">
+                      {index + 1}
+                    </span>
+                    <span className="text-sm font-bold text-navy">{step}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <p className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold leading-6 text-amber-950">
+              Navigation support only. MediRoute never provides a definitive medical diagnosis.
+            </p>
           </div>
 
-          {/* Right Column: Dynamic Form Card & Decoration */}
-          <div className="lg:w-[50%] flex justify-center lg:justify-end relative w-full">
-            
-            {/* Medical Icon Illustration Background */}
-            <div className="hidden lg:flex absolute top-1/2 left-1/4 transform -translate-y-1/2 -translate-x-1/2 text-[240px] opacity-[0.02] pointer-events-none z-0">
-              🩺
+          <div className="rounded-3xl border border-border bg-white shadow-2xl shadow-navy/10">
+            <div className="flex items-center justify-between gap-6 border-b border-border px-8 py-6">
+              <div>
+                <p className="text-xs font-black uppercase text-teal">Start a care route</p>
+                <h3 className="mt-1 text-2xl font-black text-navy">Describe Your Symptoms</h3>
+              </div>
+              <div className="hidden rounded-2xl bg-bg px-4 py-3 text-right sm:block">
+                <p className="text-xs font-black uppercase text-text-muted">City</p>
+                <p className="text-sm font-black text-navy">{city}</p>
+              </div>
             </div>
 
-            {/* The Form Card */}
-            <div className="w-full max-w-[480px] bg-white border border-border/80 rounded-2xl p-6 md:p-8 shadow-xl relative z-10 overflow-hidden">
-              {/* Soft decorative background accents */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-teal/5 rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-navy/5 rounded-full blur-3xl pointer-events-none" />
-
-              <h3 className="text-xl font-bold text-navy mb-5 flex items-center space-x-2 relative z-10">
-                <span>🩺</span>
-                <span>Describe Your Symptoms</span>
-              </h3>
-
-              <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
-                {/* Symptom input */}
-              <div className="space-y-2">
-                <label className="block text-sm font-semibold text-navy">
-                  What issues or symptoms are you experiencing?
-                </label>
+            <form onSubmit={handleSubmit} className="space-y-6 p-8">
+              <div>
+                <label className="mb-2 block text-sm font-black text-navy">Symptoms</label>
                 <textarea
                   value={symptomText}
                   onChange={(e) => setSymptomText(e.target.value)}
-                  placeholder="Describe how you're feeling..."
-                  rows={4}
-                  className="w-full border border-border rounded-xl p-4 focus:ring-2 focus:ring-teal/20 focus:border-teal outline-none resize-none text-text bg-bg-soft/30"
+                  placeholder="Example: I have chest pain and difficulty breathing..."
+                  rows={6}
+                  className="min-h-40 w-full resize-none rounded-2xl border border-border bg-bg px-4 py-4 text-base text-text outline-none focus:border-teal focus:bg-white focus:ring-4 focus:ring-teal/10"
                   disabled={loading}
                 />
               </div>
 
-              {/* City selector */}
-              <div className="space-y-2">
-                <label className="block text-sm font-semibold text-navy">
-                  Your Current City
-                </label>
-                <div className="relative">
+              <div className="grid gap-5 md:grid-cols-[0.95fr_1.05fr]">
+                <div>
+                  <label className="mb-2 block text-sm font-black text-navy">Current City</label>
                   <select
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    className="w-full border border-border bg-white rounded-xl p-4 outline-none focus:ring-2 focus:ring-teal/20 focus:border-teal text-text appearance-none cursor-pointer"
+                    className="h-14 w-full rounded-2xl border border-border bg-white px-4 py-3 text-base font-bold text-text outline-none focus:border-teal focus:ring-4 focus:ring-teal/10"
                     disabled={loading}
                   >
                     {cities.map((c) => (
@@ -214,115 +227,135 @@ function Home() {
                       </option>
                     ))}
                   </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-text-muted">
-                    ▼
-                  </div>
                 </div>
-              </div>
 
-              {/* Error messages */}
-              {error && (
-                <div className="bg-red-50 text-danger border border-red-200/80 rounded-xl p-4 text-sm font-medium">
-                  ⚠️ {error}
-                </div>
-              )}
-
-              {/* Action Buttons */}
-              <div className="pt-2">
-                {loading ? (
-                  <div className="w-full bg-navy-light text-white font-semibold py-4 rounded-xl shadow-md flex flex-col items-center justify-center space-y-2">
-                    <svg className="animate-spin h-6 w-6 text-teal-light" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    <span className="text-sm tracking-wide">{loadingPhase}</span>
-                  </div>
-                ) : (
-                  <button
-                    type="submit"
-                    className="w-full bg-teal hover:bg-teal-light text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer transform hover:-translate-y-[1px]"
-                  >
-                    Find My Doctor
-                  </button>
-                )}
-              </div>
-            </form>
-            </div>
-          </div>
-        </div>
-      </main>
-
-      {/* ── Emergency Mode Modal ────────────────────────────── */}
-      {showEmergencyModal && (
-        <div className="fixed inset-0 bg-navy/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
-          <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden border border-border">
-            <div className="bg-red-600 text-white p-6">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold flex items-center space-x-2">
-                  <span>🚨</span>
-                  <span>Emergency Mode Enabled</span>
-                </h3>
-                <button
-                  onClick={() => setShowEmergencyModal(false)}
-                  className="text-white hover:text-white/80 font-bold text-xl"
-                >
-                  ✕
-                </button>
-              </div>
-              <p className="text-sm text-white/90 mt-2">
-                If you are facing a life-threatening medical situation, immediately call the national emergency number:
-              </p>
-              <div className="mt-4 flex items-center justify-center">
-                <a
-                  href="tel:112"
-                  className="bg-white text-red-600 font-extrabold text-xl py-3 px-6 rounded-xl shadow-md flex items-center space-x-2 hover:scale-105 transition-transform"
-                >
-                  📞 Call 112
-                </a>
-              </div>
-            </div>
-
-            <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
-              <h4 className="font-bold text-navy border-b pb-2">Recommended Emergency Hospitals:</h4>
-              
-              {cities.map((cityName) => (
-                <div key={cityName} className="space-y-3">
-                  <h5 className="font-semibold text-teal uppercase text-xs tracking-wider">{cityName}</h5>
-                  <div className="space-y-2.5">
-                    {emergencyHospitals[cityName].map((hosp, idx) => (
-                      <div key={idx} className="bg-bg-soft p-3 rounded-lg border border-border/60 text-left">
-                        <div className="font-bold text-sm text-navy">{hosp.name}</div>
-                        <div className="text-xs text-text-muted mt-0.5">{hosp.location}</div>
-                        <div className="mt-2 text-xs">
-                          <a
-                            href={`tel:${hosp.phone.replace(/-/g, '')}`}
-                            className="text-teal hover:underline font-semibold"
-                          >
-                            📞 {hosp.phone}
-                          </a>
-                        </div>
-                      </div>
+                <div>
+                  <p className="mb-2 text-sm font-black text-navy">Try a demo</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    {demoSymptoms.map((sample) => (
+                      <button
+                        key={sample.label}
+                        type="button"
+                        onClick={() => setSymptomText(sample.text)}
+                        className="rounded-xl border border-border bg-bg px-3 py-3 text-center text-xs font-black text-navy hover:border-teal hover:bg-teal/10 hover:text-teal"
+                        disabled={loading}
+                      >
+                        {sample.label}
+                      </button>
                     ))}
                   </div>
                 </div>
-              ))}
+              </div>
+
+              {error && (
+                <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+                  {error}
+                </div>
+              )}
+
+              {loading ? (
+                <div className="flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-navy px-5 py-4 text-sm font-black text-white">
+                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-teal-light" />
+                  {loadingPhase}
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  className="min-h-14 w-full rounded-2xl bg-teal px-5 py-4 text-base font-black text-white shadow-xl shadow-teal/20 hover:bg-teal-light focus:outline-none focus:ring-4 focus:ring-teal/20"
+                >
+                  Find My Doctor
+                </button>
+              )}
+            </form>
+          </div>
+        </section>
+      </main>
+
+      {showEmergencyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy/70 p-5 backdrop-blur-md">
+          <div className="relative flex max-h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl shadow-navy/30">
+            <button
+              type="button"
+              onClick={() => setShowEmergencyModal(false)}
+              className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl font-black text-red-600 shadow-lg hover:bg-red-50"
+              aria-label="Close emergency mode"
+            >
+              X
+            </button>
+
+            <div className="bg-red-600 px-7 py-6 pr-20 text-white">
+              <p className="text-xs font-black uppercase text-white/80">Emergency mode</p>
+              <h3 className="mt-2 text-3xl font-black">Call 112 for critical symptoms</h3>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-white/90">
+                If symptoms are life-threatening, call the national emergency number immediately or visit the nearest emergency facility.
+              </p>
+              <a
+                href="tel:112"
+                className="mt-5 inline-flex rounded-2xl bg-white px-6 py-3 text-base font-black text-red-600 shadow-md hover:bg-red-50 hover:text-red-700"
+              >
+                Call 112 Now
+              </a>
             </div>
 
-            <div className="bg-bg-soft px-6 py-4 border-t border-border flex justify-end">
-              <button
-                onClick={() => setShowEmergencyModal(false)}
-                className="bg-navy text-white text-xs font-bold uppercase px-5 py-2.5 rounded-lg hover:bg-navy-light transition-colors"
-              >
-                Close Emergency Mode
-              </button>
+            <div className="grid min-h-0 flex-1 gap-0 lg:grid-cols-[240px_1fr]">
+              <div className="border-b border-border bg-bg p-5 lg:border-b-0 lg:border-r">
+                <p className="mb-3 text-xs font-black uppercase text-text-muted">Choose city</p>
+                <div className="grid grid-cols-2 gap-2 lg:grid-cols-1">
+                  {cities.map((cityName) => (
+                    <button
+                      key={cityName}
+                      type="button"
+                      onClick={() => setEmergencyCity(cityName)}
+                      className={`rounded-xl px-4 py-3 text-left text-sm font-black ${
+                        emergencyCity === cityName
+                          ? 'bg-navy text-white shadow-md'
+                          : 'bg-white text-navy hover:bg-teal/10 hover:text-teal'
+                      }`}
+                    >
+                      {cityName}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="min-h-0 overflow-y-auto p-6 md:p-7">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                  <div>
+                    <p className="text-xs font-black uppercase text-teal">Emergency hospitals</p>
+                    <h4 className="text-2xl font-black text-navy">{emergencyCity}</h4>
+                  </div>
+                  <p className="text-sm font-semibold text-text-muted">Verified emergency contacts for demo use</p>
+                </div>
+
+                <div className="mt-6 grid gap-4">
+                  {emergencyHospitals[emergencyCity].map((hosp, index) => (
+                    <div key={hosp.name} className="rounded-2xl border border-border bg-bg p-5">
+                      <div className="flex gap-4">
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-600 text-sm font-black text-white">
+                          {index + 1}
+                        </span>
+                        <div>
+                          <h5 className="text-lg font-black text-navy">{hosp.name}</h5>
+                          <p className="mt-1 text-sm text-text-muted">{hosp.location}</p>
+                          <a
+                            href={`tel:${hosp.phone.replace(/-/g, '')}`}
+                            className="mt-3 inline-flex rounded-xl bg-white px-4 py-2 text-sm font-black text-teal shadow-sm hover:text-teal-light"
+                          >
+                            {hosp.phone}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* ── Footer ───────────────────────────────────────────── */}
-      <footer className="bg-navy-dark text-white/40 text-center text-xs py-6 border-t border-navy/20">
-        MediRoute MVP — Bharat Academix CodeQuest 2026. This app is for navigational help and does not provide clinical diagnosis.
+      <footer className="border-t border-border bg-white px-5 py-4 text-center text-xs font-semibold text-text-muted">
+        MediRoute MVP - Bharat Academix CodeQuest 2026. Navigation support only, not clinical diagnosis.
       </footer>
     </div>
   )

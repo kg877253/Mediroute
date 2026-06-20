@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* ── MediRoute Brand Tokens ─────────────────────────────── */
 @theme {
   --color-navy: #1E2761;
   --color-navy-light: #2a3578;
@@ -19,13 +18,16 @@
   --font-sans: "Inter", sans-serif;
 }
 
-/* ── Base Resets ─────────────────────────────────────────── */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html {
+  background-color: var(--color-bg);
 }
 
 body {
@@ -37,8 +39,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Smooth transitions globally ────────────────────────── */
-a, button, input, textarea {
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+a,
+button,
+input,
+select,
+textarea {
   transition: all 0.2s ease;
 }
 

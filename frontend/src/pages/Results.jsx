@@ -1,27 +1,32 @@
 import { useLocation, Link } from 'react-router-dom'
-import { jsPDF } from 'jspdf'
 
 function Results() {
   const location = useLocation()
   const { city, triageData, searchData } = location.state || {}
 
-  // Redirect to home if accessed directly without form submission
   if (!triageData || !searchData) {
     return (
-      <div className="min-h-screen bg-bg flex flex-col items-center justify-center p-6 text-center">
-        <h2 className="text-2xl font-bold text-navy mb-4">No search details found</h2>
-        <p className="text-text-muted mb-6">Please start a search from the home page first.</p>
-        <Link to="/" className="bg-teal text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-teal-light transition-all">
-          Go to Home
-        </Link>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-bg p-6 text-center font-sans">
+        <div className="max-w-md rounded-3xl border border-border bg-white p-8 shadow-xl">
+          <h2 className="text-2xl font-black text-navy">No search details found</h2>
+          <p className="mt-3 text-text-muted">Please start a search from the home page first.</p>
+          <Link to="/" className="mt-6 inline-flex rounded-2xl bg-teal px-6 py-3 text-sm font-black text-white shadow-md hover:bg-teal-light">
+            Go to Home
+          </Link>
+        </div>
       </div>
     )
   }
 
   const { specialty, urgency, reasoning } = triageData
-  const { results, fallbackUsed } = searchData
+  const { results = [], fallbackUsed } = searchData
 
-  // Whitelisted emergency hospitals (matching city)
+  const urgencyStyles = {
+    high: 'border-red-200 bg-red-50 text-red-700',
+    medium: 'border-amber-200 bg-amber-50 text-amber-800',
+    low: 'border-green-200 bg-green-50 text-green-700'
+  }
+
   const emergencyHospitals = {
     Delhi: [
       { name: 'AIIMS Emergency Department', phone: '011-26588500', location: 'Ansari Nagar, New Delhi' },
@@ -52,19 +57,17 @@ function Results() {
 
   const cityHospitals = emergencyHospitals[city] || []
 
-  // Download Emergency PDF Card using jsPDF
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
+    const { jsPDF } = await import('jspdf')
     const doc = new jsPDF()
-    
-    // Title
-    doc.setFillColor(30, 39, 97) // #1E2761
+
+    doc.setFillColor(30, 39, 97)
     doc.rect(0, 0, 210, 30, 'F')
     doc.setTextColor(255, 255, 255)
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(20)
-    doc.text('MEDI-ROUTE EMERGENCY CARD', 15, 20)
+    doc.text('MEDIROUTE EMERGENCY CARD', 15, 20)
 
-    // Body text
     doc.setTextColor(30, 39, 97)
     doc.setFontSize(14)
     doc.text(`Emergency Info for: ${city}`, 15, 45)
@@ -75,31 +78,28 @@ function Results() {
     doc.text(`Generated on: ${new Date().toLocaleString()}`, 15, 52)
     doc.line(15, 55, 195, 55)
 
-    // Blood Group and National Emergency Line
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(12)
     doc.setTextColor(220, 38, 38)
-    doc.text(`NATIONAL EMERGENCY: 112`, 15, 65)
+    doc.text('NATIONAL EMERGENCY: 112', 15, 65)
 
     doc.setTextColor(30, 39, 97)
-    doc.text(`BLOOD GROUP: _____________________`, 100, 65)
+    doc.text('BLOOD GROUP: _____________________', 100, 65)
 
-    // Triage Recommendation
     doc.setFontSize(11)
     doc.text('AI Recommendation:', 15, 80)
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(80, 80, 80)
     doc.text(`Recommended Specialist: ${specialty}`, 15, 87)
-    
+
     const splitReasoning = doc.splitTextToSize(reasoning, 180)
     doc.text(splitReasoning, 15, 94)
 
-    // City Emergency Care
     const yOffsetAfterReasoning = 100 + (splitReasoning.length * 6)
     doc.setFont('helvetica', 'bold')
     doc.setTextColor(30, 39, 97)
     doc.text(`Top 3 Emergency Providers in ${city}:`, 15, yOffsetAfterReasoning)
-    
+
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(80, 80, 80)
     let yPos = yOffsetAfterReasoning + 7
@@ -109,7 +109,6 @@ function Results() {
       yPos += 14
     })
 
-    // Footer Disclaimer
     doc.setFillColor(240, 242, 247)
     doc.rect(10, 260, 190, 25, 'F')
     doc.setFontSize(8)
@@ -121,207 +120,189 @@ function Results() {
   }
 
   return (
-    <div className="min-h-screen bg-bg flex flex-col font-sans">
-      {/* ── Navigation Header ─────────────────────────────────── */}
-      <header className="bg-navy text-white py-5 px-6 shadow-md border-b border-navy-light sticky top-0 z-40">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <span className="text-3xl">🏥</span>
-            <Link to="/" className="text-2xl font-bold tracking-tight text-white hover:text-teal-light transition-colors">
-              Medi<span className="text-teal-light">Route</span>
-            </Link>
-          </div>
+    <div className="min-h-screen bg-bg font-sans text-text">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-navy shadow-lg">
+        <div className="mx-auto flex max-w-[1180px] items-center justify-between px-8 py-4">
+          <Link to="/" className="flex items-center gap-3 text-white hover:text-white">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-2xl font-black text-teal shadow-md">
+              +
+            </div>
+            <div>
+              <p className="text-2xl font-black leading-none">
+                Medi<span className="text-teal-light">Route</span>
+              </p>
+              <p className="mt-1 text-xs font-semibold text-white/70">{city} care route</p>
+            </div>
+          </Link>
+
           <Link
             to="/"
-            className="bg-navy-light hover:bg-navy-dark text-white font-bold text-xs uppercase px-4 py-2.5 rounded-lg border border-border/20 transition-all"
+            className="rounded-xl bg-white/10 px-5 py-3 text-xs font-black uppercase text-white hover:bg-white/20 hover:text-white"
           >
             Search Again
           </Link>
         </div>
       </header>
 
-      {/* ── Emergency Callout Banner (High Urgency) ───────────── */}
-      {urgency === 'high' && (
-        <div className="bg-red-600 text-white py-4 px-6 shadow-inner animate-pulse">
-          <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center space-x-3">
-              <span className="text-2xl">⚠️</span>
-              <div className="text-left">
-                <h4 className="font-extrabold text-lg">High Urgency Situation Detected</h4>
-                <p className="text-sm text-white/90 leading-tight">
-                  This may be urgent — consider calling 112 or visiting the nearest emergency room
-                </p>
-              </div>
-            </div>
-            <a
-              href="tel:112"
-              className="bg-white text-red-600 font-black text-base px-6 py-2.5 rounded-xl shadow-md hover:scale-105 transition-transform"
-            >
-              📞 Call 112
-            </a>
-          </div>
-        </div>
-      )}
-
-      {/* ── Results Container ────────────────────────────────── */}
-      <main className="flex-1 max-w-5xl mx-auto w-full px-4 py-8 md:py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 text-left">
-        
-        {/* Left Section: Triage Results & Doctor List (Col Span 8) */}
-        <div className="lg:col-span-8 space-y-8">
-          
-          {/* Triage Summary Card */}
-          <section className="bg-white border border-border/80 rounded-2xl p-6 md:p-8 shadow-md">
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-              <h3 className="text-xl font-bold text-navy">Triage Assessment</h3>
-              
-              <div className="flex items-center space-x-2">
-                {/* Urgency Badge */}
-                <span className={`inline-flex items-center text-xs uppercase font-extrabold px-3 py-1.5 rounded-full ${
-                  urgency === 'high' ? 'bg-red-100 text-red-800' :
-                  urgency === 'medium' ? 'bg-amber-100 text-amber-800' :
-                  'bg-green-100 text-green-800'
-                }`}>
-                  Urgency: {urgency}
-                </span>
-
-                {/* Download PDF Card Button */}
-                <button
-                  onClick={handleDownloadPDF}
-                  className="bg-teal/10 hover:bg-teal/20 text-teal font-semibold text-xs py-1.5 px-3 rounded-full flex items-center space-x-1"
-                >
-                  📥 Download Emergency Card
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-4">
+      <main className="mx-auto w-full max-w-[1180px] px-8 py-10 lg:py-12">
+        {urgency === 'high' && (
+          <section className="mb-6 rounded-3xl border border-red-200 bg-red-600 p-5 text-white shadow-xl shadow-red-950/10">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                <span className="text-xs uppercase tracking-wider text-text-muted font-bold block mb-1">
-                  Recommended Specialty
-                </span>
-                <p className="text-2xl font-black text-navy">{specialty}</p>
+                <p className="text-xs font-black uppercase text-white/80">High urgency detected</p>
+                <h1 className="mt-1 text-2xl font-black">Call 112 or visit the nearest emergency room.</h1>
+                <p className="mt-1 text-sm text-white/90">MediRoute is advisory. Use emergency services for critical symptoms.</p>
               </div>
-
-              <div>
-                <span className="text-xs uppercase tracking-wider text-text-muted font-bold block mb-1">
-                  AI Triage Reasoning
-                </span>
-                <p className="text-text leading-relaxed bg-bg-soft/40 p-4 rounded-xl border border-border/40">
-                  {reasoning}
-                </p>
-              </div>
-
-              <div className="text-xs text-text-muted/80 italic border-t pt-3 mt-4">
-                Disclaimer: AI triage does not constitute a diagnostic claim. Seek professional care to verify.
-              </div>
+              <a href="tel:112" className="inline-flex rounded-2xl bg-white px-6 py-3 text-sm font-black text-red-600 shadow-md hover:bg-red-50 hover:text-red-700">
+                Call 112
+              </a>
             </div>
           </section>
+        )}
 
-          {/* Doctor Recommendations */}
-          <section className="space-y-5">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="text-2xl font-black text-navy">Recommended Doctors</h3>
-              <span className="text-sm font-semibold text-text-muted">
-                Showing top results in <span className="text-navy">{city}</span>
-              </span>
-            </div>
-
-            {fallbackUsed && (
-              <div className="bg-amber-50 border border-amber-200/80 rounded-xl p-4 text-sm text-amber-900 leading-relaxed">
-                💡 <strong>Notice:</strong> We couldn't find a doctor specifically matching <strong>{specialty}</strong> in <strong>{city}</strong>. We are showing general and top-rated physicians in your area instead so you can obtain an initial consultation.
-              </div>
-            )}
-
-            {/* Doctors Grid */}
-            <div className="space-y-4">
-              {results.length > 0 ? (
-                results.slice(0, 5).map((doc) => (
-                  <div key={doc.id} className="bg-white border border-border/80 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-5">
-                    
-                    {/* Doctor Info */}
-                    <div className="space-y-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h4 className="text-lg font-bold text-navy">{doc.name}</h4>
-                        {doc.nmcVerified && (
-                          <span className="bg-green-100 text-green-800 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full flex items-center">
-                            ✓ NMC Verified
-                          </span>
-                        )}
-                      </div>
-                      
-                      <p className="text-sm text-teal font-semibold">{doc.specialty}</p>
-
-                      <div className="flex items-center space-x-4 text-xs text-text-muted pt-1">
-                        <span className="flex items-center">
-                          ⭐ <strong className="text-navy ml-1">{doc.rating}</strong>/5.0
-                        </span>
-                        <span>•</span>
-                        <span>
-                          Consultation fee: <strong>₹{doc.feeRangeMin} - ₹{doc.feeRangeMax}</strong>
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Navigation Map Action */}
-                    <div className="flex items-center">
-                      <a
-                        href={`https://www.google.com/maps/search/?api=1&query=Dr.+${encodeURIComponent(doc.name)}+${encodeURIComponent(doc.specialty)}+${encodeURIComponent(doc.city)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-navy hover:bg-navy-light text-white font-bold text-xs uppercase px-5 py-3 rounded-xl shadow-md flex items-center space-x-1.5 transition-all text-center w-full md:w-auto"
-                      >
-                        <span>🧭 Get Directions</span>
-                      </a>
-                    </div>
+        <section className="grid gap-9 lg:grid-cols-[minmax(0,1fr)_360px]">
+          <div className="space-y-8">
+            <section className="overflow-hidden rounded-3xl border border-border bg-white shadow-xl shadow-navy/5">
+              <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_280px]">
+                <div className="p-8 md:p-10">
+                  <p className="text-xs font-black uppercase text-teal">Triage assessment</p>
+                  <h1 className="mt-3 text-4xl font-black leading-tight text-navy">{specialty}</h1>
+                  <p className="mt-5 max-w-3xl text-base leading-8 text-text-muted">{reasoning}</p>
+                  <div className="mt-5 rounded-2xl border border-border bg-bg px-4 py-3 text-sm font-semibold text-text-muted">
+                    AI triage does not diagnose illness. Confirm with a qualified clinician.
                   </div>
-                ))
-              ) : (
-                <div className="bg-white border border-border rounded-2xl p-8 text-center text-text-muted">
-                  No doctors found in your city.
+                </div>
+
+                <div className="border-t border-border bg-bg p-7 lg:border-l lg:border-t-0">
+                  <p className="text-xs font-black uppercase text-text-muted">Route status</p>
+                  <span className={`mt-3 inline-flex rounded-full border px-3 py-1.5 text-xs font-black uppercase ${urgencyStyles[urgency] || urgencyStyles.medium}`}>
+                    Urgency: {urgency}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleDownloadPDF}
+                    className="mt-5 w-full rounded-2xl border border-teal/20 bg-white px-4 py-3 text-sm font-black leading-5 text-teal shadow-sm hover:bg-teal/10"
+                  >
+                    Download Emergency Card
+                  </button>
+                  <div className="mt-5 rounded-2xl bg-white p-4">
+                    <p className="text-xs font-black uppercase text-text-muted">Selected city</p>
+                    <p className="mt-1 text-xl font-black text-navy">{city}</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-xs font-black uppercase text-teal">Top matches</p>
+                  <h2 className="text-3xl font-black text-navy">Recommended Doctors</h2>
+                </div>
+                <p className="text-sm font-bold text-text-muted">
+                  Showing {Math.min(results.length, 5)} results in <span className="text-navy">{city}</span>
+                </p>
+              </div>
+
+              {fallbackUsed && (
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold leading-6 text-amber-900">
+                  No exact {specialty} match was found in {city}, so MediRoute is showing top-rated local doctors for an initial consultation.
                 </div>
               )}
-            </div>
-          </section>
-        </div>
 
-        {/* Right Section: City Emergency Hospitals (Col Span 4) */}
-        <div className="lg:col-span-4 space-y-6">
-          <section className="bg-bg-soft/70 border border-border rounded-2xl p-6 shadow-sm">
-            <h4 className="text-lg font-bold text-navy mb-4 flex items-center space-x-2">
-              <span>🏥</span>
-              <span>Local Emergency Care</span>
-            </h4>
-            
-            <p className="text-xs text-text-muted mb-4 leading-relaxed">
-              If your symptoms worsen or require immediate emergency assistance, contact these major institutions in <strong>{city}</strong>:
-            </p>
-
-            <div className="space-y-3">
-              {cityHospitals.length > 0 ? (
-                cityHospitals.map((hosp, idx) => (
-                  <div key={idx} className="bg-white p-4 rounded-xl border border-border/50 text-left">
-                    <h5 className="font-bold text-sm text-navy">{hosp.name}</h5>
-                    <p className="text-[11px] text-text-muted mt-0.5 leading-snug">{hosp.location}</p>
-                    <a
-                      href={`tel:${hosp.phone.replace(/-/g, '')}`}
-                      className="inline-flex items-center text-xs text-teal font-bold hover:underline mt-2"
+              <div className="grid gap-5">
+                {results.length > 0 ? (
+                  results.slice(0, 5).map((doc, index) => (
+                    <article
+                      key={doc.id}
+                      className="rounded-3xl border border-border bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl hover:shadow-navy/10 md:p-7"
                     >
-                      📞 {hosp.phone}
-                    </a>
-                  </div>
-                ))
-              ) : (
-                <p className="text-xs text-text-muted">No emergency hospitals listed for this city.</p>
-              )}
-            </div>
-          </section>
-        </div>
+                      <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                        <div className="flex gap-4">
+                          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-navy text-xl font-black text-white shadow-md">
+                            {index + 1}
+                          </div>
+                          <div>
+                            <div className="flex flex-wrap items-center gap-2">
+                              <h3 className="text-[22px] font-black leading-tight text-navy">{doc.name}</h3>
+                              {doc.nmcVerified && (
+                                <span className="rounded-full bg-green-100 px-3 py-1 text-[11px] font-black uppercase text-green-700">
+                                  NMC Verified
+                                </span>
+                              )}
+                            </div>
+                            <p className="mt-1 text-base font-black text-teal">{doc.specialty}</p>
+                          <div className="mt-4 flex flex-wrap gap-3 text-sm">
+                              <span className="rounded-xl bg-bg px-3 py-2 font-black text-navy">
+                                Rating {doc.rating}/5.0
+                              </span>
+                              <span className="rounded-xl bg-bg px-3 py-2 font-black text-navy">
+                                Rs. {doc.feeRangeMin} - Rs. {doc.feeRangeMax}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
 
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(doc.name)}+${encodeURIComponent(doc.specialty)}+${encodeURIComponent(doc.city)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-2xl bg-navy px-5 py-3 text-sm font-black uppercase text-white shadow-md hover:bg-navy-light hover:text-white"
+                        >
+                          Get Directions
+                        </a>
+                      </div>
+                    </article>
+                  ))
+                ) : (
+                  <div className="rounded-3xl border border-border bg-white p-8 text-center text-text-muted shadow-sm">
+                    No doctors found in your city.
+                  </div>
+                )}
+              </div>
+            </section>
+          </div>
+
+          <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
+            <section className="rounded-3xl border border-border bg-white p-7 shadow-xl shadow-navy/5">
+              <p className="text-xs font-black uppercase text-teal">Local emergency care</p>
+              <h2 className="mt-2 text-2xl font-black text-navy">{city} contacts</h2>
+              <p className="mt-2 text-sm leading-6 text-text-muted">
+                If symptoms worsen, call 112 or contact one of these emergency providers.
+              </p>
+
+              <div className="mt-6 space-y-4">
+                {cityHospitals.length > 0 ? (
+                  cityHospitals.map((hosp) => (
+                    <div key={hosp.name} className="rounded-2xl border border-border bg-bg p-5">
+                      <h3 className="text-sm font-black text-navy">{hosp.name}</h3>
+                      <p className="mt-1 text-xs leading-5 text-text-muted">{hosp.location}</p>
+                      <a
+                        href={`tel:${hosp.phone.replace(/-/g, '')}`}
+                        className="mt-3 inline-flex rounded-xl bg-white px-3 py-2 text-sm font-black text-teal shadow-sm"
+                      >
+                        {hosp.phone}
+                      </a>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-text-muted">No emergency hospitals listed for this city.</p>
+                )}
+              </div>
+            </section>
+
+            <section className="rounded-3xl bg-navy p-7 text-white shadow-xl shadow-navy/15">
+              <p className="text-xs font-black uppercase text-teal-light">Safety note</p>
+              <p className="mt-2 text-sm leading-6 text-white/80">
+                MediRoute is built for healthcare navigation only. It does not replace professional medical judgement.
+              </p>
+            </section>
+          </aside>
+        </section>
       </main>
 
-      {/* ── Footer ───────────────────────────────────────────── */}
-      <footer className="bg-navy-dark text-white/40 text-center text-xs py-6 border-t border-navy/20 mt-12">
-        MediRoute MVP — Bharat Academix CodeQuest 2026. All recommendations are advisory. Dial 112 for direct emergencies.
+      <footer className="border-t border-border bg-white px-5 py-4 text-center text-xs font-semibold text-text-muted">
+        MediRoute MVP - Bharat Academix CodeQuest 2026. All recommendations are advisory.
       </footer>
     </div>
   )
