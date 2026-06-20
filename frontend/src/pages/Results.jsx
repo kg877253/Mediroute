@@ -1,10 +1,9 @@
-import { useLocation, Link, useNavigate } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import { jsPDF } from 'jspdf'
 
 function Results() {
   const location = useLocation()
-  const navigate = useNavigate()
-  const { symptomText, city, triageData, searchData } = location.state || {}
+  const { city, triageData, searchData } = location.state || {}
 
   // Redirect to home if accessed directly without form submission
   if (!triageData || !searchData) {

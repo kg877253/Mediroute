@@ -1,16 +1,43 @@
-# React + Vite
+# MediRoute Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite frontend for the MediRoute hackathon MVP.
 
-Currently, two official plugins are available:
+## What It Does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Lets a user describe symptoms in plain English.
+- Lets the user choose one supported city: Delhi, Mumbai, Jaipur, Goa, or Bangalore.
+- Sends symptoms to the backend triage endpoint.
+- Shows recommended specialty, urgency, reasoning, and matching doctors.
+- Shows high-urgency emergency guidance with a `tel:112` action.
+- Supports an emergency mode modal and downloadable PDF emergency card.
 
-## React Compiler
+MediRoute is a healthcare navigation tool, not a diagnosis tool. The UI should never claim to diagnose a disease.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Setup
 
-## Expanding the ESLint configuration
+```bash
+npm install
+cp .env.example .env
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+The frontend expects:
+
+```env
+VITE_API_URL=http://localhost:5000
+```
+
+## Scripts
+
+```bash
+npm run dev
+npm run build
+npm run lint
+npm run preview
+```
+
+## Deployment
+
+Deploy target: Vercel.
+
+Set `VITE_API_URL` to the deployed Render backend URL before production deployment.

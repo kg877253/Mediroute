@@ -9,6 +9,7 @@ function Home() {
   const [error, setError] = useState('')
   const [showEmergencyModal, setShowEmergencyModal] = useState(false)
   const navigate = useNavigate()
+  const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
   // Whitelisted cities
   const cities = ['Delhi', 'Mumbai', 'Jaipur', 'Goa', 'Bangalore']
@@ -54,16 +55,24 @@ function Home() {
     try {
       // Phase 1: Gemini Triage
       setLoadingPhase('Analyzing symptoms with Gemini AI...')
-      const triageRes = await fetch(`${import.meta.env.VITE_API_URL}/api/triage`, {
+      const triageRes = await fetch(`${apiBaseUrl}/api/triage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ symptomText })
       })
       const triageData = await triageRes.json()
 
+      if (!triageRes.ok) {
+        throw new Error(triageData.error || 'Symptom triage failed.')
+      }
+
+      if (!triageData.specialty) {
+        throw new Error('Triage response did not include a specialty.')
+      }
+
       // Phase 2: Doctor Search
       setLoadingPhase('Finding verified doctors near you...')
-      const searchRes = await fetch(`${import.meta.env.VITE_API_URL}/api/search`, {
+      const searchRes = await fetch(`${apiBaseUrl}/api/search`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -72,6 +81,10 @@ function Home() {
         })
       })
       const searchData = await searchRes.json()
+
+      if (!searchRes.ok) {
+        throw new Error(searchData.error || 'Doctor search failed.')
+      }
 
       // Navigate to results page with data
       navigate('/results', {
@@ -84,7 +97,7 @@ function Home() {
       })
     } catch (err) {
       console.error(err)
-      setError('Failed to connect to the server. Please check that the backend is running.')
+      setError(err.message || 'Failed to connect to the server. Please check that the backend is running.')
     } finally {
       setLoading(false)
       setLoadingPhase('')

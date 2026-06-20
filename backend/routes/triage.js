@@ -22,6 +22,8 @@ const VALID_SPECIALTIES = [
   "Dentist",
 ];
 
+const VALID_URGENCIES = ["low", "medium", "high"];
+
 const SYSTEM_INSTRUCTION =
   'You are a medical triage assistant for a navigation app. Given a patient\'s symptom ' +
   "description, determine: 1) the single most appropriate specialty from EXACTLY this list: " +
@@ -73,10 +75,24 @@ router.post("/", async (req, res) => {
       parsed.specialty = "General Physician";
     }
 
+    // Gemini is instructed to return only low/medium/high, but we still
+    // validate it so the UI never receives an unexpected urgency label.
+    if (!VALID_URGENCIES.includes(parsed.urgency)) {
+      console.warn(
+        `Gemini returned unknown urgency "${parsed.urgency}", falling back.`
+      );
+      parsed.urgency = FALLBACK.urgency;
+    }
+
+    if (typeof parsed.reasoning !== "string" || !parsed.reasoning.trim()) {
+      console.warn("Gemini returned empty reasoning, falling back.");
+      parsed.reasoning = FALLBACK.reasoning;
+    }
+
     return res.json({
       specialty: parsed.specialty,
       urgency: parsed.urgency,
-      reasoning: parsed.reasoning,
+      reasoning: parsed.reasoning.trim(),
     });
   } catch (err) {
     console.error("Triage error:", err.message || err);
