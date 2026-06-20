@@ -93,11 +93,12 @@ router.post("/", async (req, res) => {
       specialty: parsed.specialty,
       urgency: parsed.urgency,
       reasoning: parsed.reasoning.trim(),
-      confidence: Math.floor(Math.random() * 15) + 85, // Random confidence 85-99% for demo
+      confidence: Math.floor(Math.random() * 15) + 85, // Demo-only score, not a real model metric
+      fallbackUsed: false,
     });
   } catch (err) {
     console.error("Triage error:", err.message || err);
-    return res.json(FALLBACK);
+    return res.json({ ...FALLBACK, confidence: 0, fallbackUsed: true });
   }
 });
 

@@ -7,21 +7,20 @@ const HealthInsights = () => {
     { label: "Most Searched Today", value: "Cardiologist", city: "Delhi" },
     { label: "Emergency Searches", value: "23%", time: "this week" },
     { label: "Active Users", value: "1,247", time: "currently online" },
-    { label: "Doctors Available", value: "847", time: "across all cities" }
+    { label: "Doctors Available", value: "120", time: "across all cities" }
   ]
 
   return (
-    <div className="mx-auto mb-8 max-w-[1180px] px-8">
+    <div className="w-full px-6 py-6">
       <div className="rounded-2xl border border-teal/20 bg-gradient-to-r from-navy to-navy-light p-8 shadow-xl shadow-navy/20">
-        <h2 className="text-2xl font-black text-white mb-6">📊 Live Health Insights</h2>
+        <h2 className="text-2xl font-bold text-white mb-6">📊 Health Insights</h2>
         <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
           {insights.map((insight, index) => (
-            <div key={index} className="rounded-2xl bg-white/10 backdrop-blur p-6">
-              <div className="text-xs font-black uppercase text-white/70 mb-2">{insight.label}</div>
-              <div className="text-3xl font-black text-white">{insight.value}</div>
-              <div className="text-sm font-semibold text-white/60 mt-2">
-                {insight.city && `${insight.city} • `}
-                {insight.time}
+            <div key={index} className="rounded-2xl bg-white/10 backdrop-blur p-6 transition-all hover:bg-white/20 min-h-[120px]">
+              <div className="text-xs font-semibold uppercase text-white/70 mb-2">{insight.label}</div>
+              <div className="text-3xl font-bold text-white">{insight.value}</div>
+              <div className="text-sm font-medium text-white/60 mt-2 overflow-hidden text-ellipsis whitespace-nowrap">
+                {insight.city ? `${insight.city} • ${insight.time}` : insight.time}
               </div>
             </div>
           ))}
@@ -178,14 +177,9 @@ function Home() {
         throw new Error(searchData.error || 'Doctor search failed.')
       }
 
-      navigate('/results', {
-        state: {
-          symptomText,
-          city,
-          triageData,
-          searchData
-        }
-      })
+      const payload = { symptomText, city, triageData, searchData }
+      sessionStorage.setItem('mediroute_results', JSON.stringify(payload))
+      navigate('/results', { state: payload })
 
       // Save to history after successful navigation
       saveToHistory(symptomText, city, triageData.specialty)
@@ -201,13 +195,13 @@ function Home() {
   return (
     <div className="min-h-screen bg-bg font-sans text-text">
       <header className="sticky top-0 z-40 border-b border-white/10 bg-navy shadow-lg">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-2xl font-black text-teal shadow-md">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-2xl font-bold text-teal shadow-md">
               +
             </div>
             <div>
-              <h1 className="text-2xl font-black leading-none text-white">
+              <h1 className="text-2xl font-bold leading-none text-white">
                 Medi<span className="text-teal-light">Route</span>
               </h1>
               <p className="mt-1 text-xs font-semibold text-white/70">Right doctor. Right cost. Right now.</p>
@@ -217,7 +211,7 @@ function Home() {
           <button
             type="button"
             onClick={openEmergencyMode}
-            className="rounded-xl bg-red-600 px-5 py-3 text-xs font-black uppercase text-white shadow-lg shadow-red-950/20 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-200"
+            className="rounded-xl bg-red-600 px-5 py-3 text-xs font-semibold uppercase text-white shadow-lg shadow-red-950/20 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-200 transition-all"
           >
             Emergency Mode
           </button>
@@ -227,9 +221,9 @@ function Home() {
       <HealthInsights />
 
       {history.length > 0 && (
-        <div className="mx-auto mb-8 max-w-[1180px] px-8">
+        <div className="w-full px-6 py-6">
           <div className="rounded-2xl border border-border bg-white p-6 shadow-md">
-            <h3 className="text-base font-black text-navy mb-4">🕐 Recent Searches</h3>
+            <h3 className="text-base font-semibold text-navy mb-4">🕐 Recent Searches</h3>
             <div className="flex gap-3 overflow-x-auto pb-3">
               {history.map((item, index) => (
                 <button
@@ -238,10 +232,10 @@ function Home() {
                     setSymptomText(item.symptom)
                     setCity(item.city)
                   }}
-                  className="rounded-xl border border-border bg-bg px-5 py-4 text-left text-sm font-black text-navy hover:border-teal hover:bg-teal/10 hover:text-teal transition-all whitespace-nowrap min-w-[220px]"
+                  className="rounded-xl border border-border bg-bg px-5 py-4 text-left text-sm font-semibold text-navy hover:border-teal hover:bg-teal/10 hover:text-teal transition-all whitespace-nowrap min-w-[220px] hover:shadow-md min-h-[80px] flex flex-col justify-center"
                 >
-                  <div className="truncate">{item.symptom}</div>
-                  <div className="text-xs font-semibold text-text-muted mt-2">{item.city} • {item.specialty}</div>
+                  <div className="truncate overflow-hidden text-ellipsis">{item.symptom}</div>
+                  <div className="text-xs font-medium text-text-muted mt-2 overflow-hidden text-ellipsis">{item.city} • {item.specialty}</div>
                 </button>
               ))}
             </div>
@@ -249,14 +243,14 @@ function Home() {
         </div>
       )}
 
-      <main className="mx-auto w-full max-w-[1180px] px-8 py-12 lg:py-16">
-        <section className="grid items-start gap-12 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="rounded-3xl border border-border bg-white p-10 shadow-xl shadow-navy/5 md:p-12">
-            <div className="inline-flex rounded-full border border-teal/20 bg-teal/10 px-4 py-2 text-xs font-black uppercase text-teal">
+      <main className="w-full px-6 py-12 lg:py-16">
+        <section className="grid items-start gap-12 lg:grid-cols-[1fr_1fr]">
+          <div className="rounded-3xl border border-border bg-white p-10 shadow-xl shadow-navy/5 md:p-12 min-h-[400px] flex flex-col justify-center">
+            <div className="inline-flex rounded-full border border-teal/20 bg-teal/10 px-4 py-2 text-xs font-semibold uppercase text-teal">
               Gemini 2.5 Flash triage navigation
             </div>
 
-            <h2 className="mt-8 text-4xl font-black leading-tight text-navy md:text-[48px]">
+            <h2 className="mt-8 text-4xl font-bold leading-tight text-navy md:text-[48px]">
               Find the right specialist in under 60 seconds.
             </h2>
 
@@ -265,61 +259,61 @@ function Home() {
             </p>
 
             <div className="mt-10 grid gap-5 sm:grid-cols-3">
-              <div className="rounded-2xl bg-bg p-6">
-                <p className="text-4xl font-black text-navy">8</p>
-                <p className="text-sm font-black uppercase text-text-muted">Specialties</p>
+              <div className="rounded-2xl bg-bg p-6 transition-all hover:shadow-md min-h-[100px] flex flex-col justify-center">
+                <p className="text-4xl font-bold text-navy">8</p>
+                <p className="text-sm font-semibold uppercase text-text-muted">Specialties</p>
               </div>
-              <div className="rounded-2xl bg-bg p-6">
-                <p className="text-4xl font-black text-navy">5</p>
-                <p className="text-sm font-black uppercase text-text-muted">Cities</p>
+              <div className="rounded-2xl bg-bg p-6 transition-all hover:shadow-md min-h-[100px] flex flex-col justify-center">
+                <p className="text-4xl font-bold text-navy">5</p>
+                <p className="text-sm font-semibold uppercase text-text-muted">Cities</p>
               </div>
-              <div className="rounded-2xl bg-bg p-6">
-                <p className="text-4xl font-black text-navy">112</p>
-                <p className="text-sm font-black uppercase text-text-muted">Emergency</p>
+              <div className="rounded-2xl bg-bg p-6 transition-all hover:shadow-md min-h-[100px] flex flex-col justify-center">
+                <p className="text-4xl font-bold text-navy">112</p>
+                <p className="text-sm font-semibold uppercase text-text-muted">Emergency</p>
               </div>
             </div>
 
             <div className="mt-10 rounded-2xl border border-border bg-bg p-6">
-              <p className="text-sm font-black uppercase text-teal">How the route works</p>
+              <p className="text-sm font-semibold uppercase text-teal">How the route works</p>
               <div className="mt-5 grid gap-4">
                 {['Describe symptoms', 'AI selects safe specialty', 'Doctors sorted by rating'].map((step, index) => (
-                  <div key={step} className="flex items-center gap-4 rounded-xl bg-white p-4 shadow-sm">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-navy text-base font-black text-white">
+                  <div key={step} className="flex items-center gap-4 rounded-xl bg-white p-4 shadow-sm transition-all hover:shadow-md min-h-[60px]">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-navy text-base font-bold text-white">
                       {index + 1}
                     </span>
-                    <span className="text-base font-bold text-navy">{step}</span>
+                    <span className="text-base font-semibold text-navy">{step}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <p className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 px-6 py-4 text-base font-semibold leading-7 text-amber-950">
+            <p className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 px-6 py-4 text-base font-medium leading-7 text-amber-950">
               Navigation support only. MediRoute never provides a definitive medical diagnosis.
             </p>
           </div>
 
           <div className="rounded-3xl border border-border bg-white shadow-2xl shadow-navy/10">
-            <div className="flex items-center justify-between gap-6 border-b border-border px-10 py-8">
+            <div className="flex items-center justify-between gap-6 border-b border-border px-10 py-8 min-h-[100px]">
               <div>
-                <p className="text-xs font-black uppercase text-teal">Start a care route</p>
-                <h3 className="mt-2 text-3xl font-black text-navy">Describe Your Symptoms</h3>
+                <p className="text-xs font-semibold uppercase text-teal">Start a care route</p>
+                <h3 className="mt-2 text-3xl font-bold text-navy">Describe Your Symptoms</h3>
               </div>
               <div className="hidden rounded-2xl bg-bg px-6 py-4 text-right sm:block">
-                <p className="text-xs font-black uppercase text-text-muted">City</p>
-                <p className="text-base font-black text-navy">{city}</p>
+                <p className="text-xs font-semibold uppercase text-text-muted">City</p>
+                <p className="text-base font-bold text-navy">{city}</p>
               </div>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-8 p-10">
               <div>
-                <label className="mb-3 block text-base font-black text-navy">Symptoms</label>
+                <label className="mb-3 block text-base font-semibold text-navy">Symptoms</label>
                 <div className="relative">
                   <textarea
                     value={symptomText}
                     onChange={(e) => setSymptomText(e.target.value)}
                     placeholder="Example: I have chest pain and difficulty breathing..."
                     rows={7}
-                    className="min-h-48 w-full resize-none rounded-2xl border border-border bg-bg px-5 py-5 pr-16 text-lg text-text outline-none focus:border-teal focus:bg-white focus:ring-4 focus:ring-teal/10"
+                    className="min-h-48 w-full resize-none rounded-2xl border border-border bg-bg px-5 py-5 pr-16 text-lg text-text outline-none focus:border-teal focus:bg-white focus:ring-4 focus:ring-teal/10 transition-all"
                     disabled={loading}
                   />
                   <button
@@ -339,11 +333,11 @@ function Home() {
 
               <div className="grid gap-6 md:grid-cols-[0.95fr_1.05fr]">
                 <div>
-                  <label className="mb-3 block text-base font-black text-navy">Current City</label>
+                  <label className="mb-3 block text-base font-semibold text-navy">Current City</label>
                   <select
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    className="h-16 w-full rounded-2xl border border-border bg-white px-5 py-4 text-lg font-bold text-text outline-none focus:border-teal focus:ring-4 focus:ring-teal/10"
+                    className="h-16 w-full rounded-2xl border border-border bg-white px-5 py-4 text-lg font-semibold text-text outline-none focus:border-teal focus:ring-4 focus:ring-teal/10 transition-all"
                     disabled={loading}
                   >
                     {cities.map((c) => (
@@ -355,14 +349,14 @@ function Home() {
                 </div>
 
                 <div>
-                  <p className="mb-3 text-base font-black text-navy">Quick Symptoms</p>
+                  <p className="mb-3 text-base font-semibold text-navy">Quick Symptoms</p>
                   <div className="grid grid-cols-2 gap-4">
                     {quickSymptoms.map((sample) => (
                       <button
                         key={sample.label}
                         type="button"
                         onClick={() => setSymptomText(sample.text)}
-                        className="rounded-xl border border-border bg-bg px-4 py-4 text-center text-sm font-black text-navy hover:border-teal hover:bg-teal/10 hover:text-teal transition-all"
+                        className="rounded-xl border border-border bg-bg px-4 py-4 text-center text-sm font-semibold text-navy hover:border-teal hover:bg-teal/10 hover:text-teal transition-all hover:shadow-md min-h-[60px] flex items-center justify-center"
                         disabled={loading}
                       >
                         {sample.label}
@@ -384,7 +378,7 @@ function Home() {
                           setError('')
                           handleSubmit({ preventDefault: () => {} })
                         }}
-                        className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-black hover:bg-red-700 transition-all"
+                        className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-700 transition-all"
                       >
                         Try Again
                       </button>
@@ -399,14 +393,14 @@ function Home() {
                     <div className="mb-5">
                       <div className="inline-block h-14 w-14 animate-spin rounded-full border-4 border-teal border-t-transparent"></div>
                     </div>
-                    <div className="text-xl font-black text-navy mb-3">{loadingPhase}</div>
+                    <div className="text-xl font-bold text-navy mb-3">{loadingPhase}</div>
                     <div className="w-full max-w-sm bg-gray-200 rounded-full h-3 mb-4">
                       <div
                         className="bg-teal h-3 rounded-full transition-all duration-500"
                         style={{ width: loadingPhase.includes('Analyzing') ? '45%' : '90%' }}
                       ></div>
                     </div>
-                    <div className="text-base font-semibold text-text-muted">
+                    <div className="text-base font-medium text-text-muted">
                       {loadingPhase.includes('Analyzing') ? 'AI is processing your symptoms...' : 'Finding the best doctors...'}
                     </div>
                   </div>
@@ -414,7 +408,7 @@ function Home() {
               ) : (
                 <button
                   type="submit"
-                  className="min-h-16 w-full rounded-2xl bg-teal px-6 py-5 text-lg font-black text-white shadow-xl shadow-teal/20 hover:bg-teal-light focus:outline-none focus:ring-4 focus:ring-teal/20"
+                  className="min-h-16 w-full rounded-2xl bg-teal px-6 py-5 text-lg font-semibold text-white shadow-xl shadow-teal/20 hover:bg-teal-light focus:outline-none focus:ring-4 focus:ring-teal/20 transition-all hover:shadow-2xl hover:scale-[1.02]"
                 >
                   Find My Doctor
                 </button>
@@ -437,14 +431,14 @@ function Home() {
             </button>
 
             <div className="bg-red-600 px-10 py-8 pr-24 text-white">
-              <p className="text-sm font-black uppercase text-white/80">Emergency mode</p>
-              <h3 className="mt-3 text-4xl font-black">Call 112 for critical symptoms</h3>
+              <p className="text-sm font-semibold uppercase text-white/80">Emergency mode</p>
+              <h3 className="mt-3 text-4xl font-bold">Call 112 for critical symptoms</h3>
               <p className="mt-3 max-w-2xl text-lg leading-7 text-white/90">
                 If symptoms are life-threatening, call the national emergency number immediately or visit the nearest emergency facility.
               </p>
               <a
                 href="tel:112"
-                className="mt-6 inline-flex rounded-2xl bg-white px-8 py-4 text-lg font-black text-red-600 shadow-md hover:bg-red-50 hover:text-red-700"
+                className="mt-6 inline-flex rounded-2xl bg-white px-8 py-4 text-lg font-semibold text-red-600 shadow-md hover:bg-red-50 hover:text-red-700 transition-all hover:shadow-lg"
               >
                 Call 112 Now
               </a>
@@ -452,17 +446,17 @@ function Home() {
 
             <div className="grid min-h-0 flex-1 gap-0 lg:grid-cols-[280px_1fr]">
               <div className="border-b border-border bg-bg p-6 lg:border-b-0 lg:border-r">
-                <p className="mb-4 text-sm font-black uppercase text-text-muted">Choose city</p>
+                <p className="mb-4 text-sm font-semibold uppercase text-text-muted">Choose city</p>
                 <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
                   {cities.map((cityName) => (
                     <button
                       key={cityName}
                       type="button"
                       onClick={() => setEmergencyCity(cityName)}
-                      className={`rounded-xl px-5 py-4 text-left text-base font-black ${
+                      className={`rounded-xl px-5 py-4 text-left text-base font-semibold transition-all min-h-[60px] flex items-center ${
                         emergencyCity === cityName
                           ? 'bg-navy text-white shadow-md'
-                          : 'bg-white text-navy hover:bg-teal/10 hover:text-teal'
+                          : 'bg-white text-navy hover:bg-teal/10 hover:text-teal hover:shadow-md'
                       }`}
                     >
                       {cityName}
@@ -474,25 +468,25 @@ function Home() {
               <div className="min-h-0 overflow-y-auto p-8 md:p-10">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                   <div>
-                    <p className="text-sm font-black uppercase text-teal">Emergency hospitals</p>
-                    <h4 className="text-3xl font-black text-navy">{emergencyCity}</h4>
+                    <p className="text-sm font-semibold uppercase text-teal">Emergency hospitals</p>
+                    <h4 className="text-3xl font-bold text-navy">{emergencyCity}</h4>
                   </div>
-                  <p className="text-base font-semibold text-text-muted">Verified emergency contacts for demo use</p>
+                  <p className="text-base font-medium text-text-muted">Verified emergency contacts for demo use</p>
                 </div>
 
                 <div className="mt-8 grid gap-6">
                   {emergencyHospitals[emergencyCity].map((hosp, index) => (
-                    <div key={hosp.name} className="rounded-2xl border border-border bg-bg p-6">
-                      <div className="flex gap-5">
-                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-600 text-base font-black text-white">
+                    <div key={hosp.name} className="rounded-2xl border border-border bg-bg p-6 min-h-[120px] flex items-center">
+                      <div className="flex gap-5 w-full">
+                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-600 text-base font-bold text-white">
                           {index + 1}
                         </span>
-                        <div>
-                          <h5 className="text-xl font-black text-navy">{hosp.name}</h5>
-                          <p className="mt-2 text-base text-text-muted">{hosp.location}</p>
+                        <div className="flex-1">
+                          <h5 className="text-xl font-semibold text-navy overflow-hidden text-ellipsis">{hosp.name}</h5>
+                          <p className="mt-2 text-base text-text-muted overflow-hidden text-ellipsis">{hosp.location}</p>
                           <a
                             href={`tel:${hosp.phone.replace(/-/g, '')}`}
-                            className="mt-4 inline-flex rounded-xl bg-white px-5 py-3 text-base font-black text-teal shadow-sm hover:text-teal-light"
+                            className="mt-4 inline-flex rounded-xl bg-white px-5 py-3 text-base font-semibold text-teal shadow-sm hover:text-teal-light transition-all hover:shadow-md"
                           >
                             {hosp.phone}
                           </a>
