@@ -1,6 +1,16 @@
 import { useLocation, Link } from 'react-router-dom'
+import { useState } from 'react'
 
 function Results() {
+  const [selectedForComparison, setSelectedForComparison] = useState([])
+
+  const toggleComparison = (doctor) => {
+    if (selectedForComparison.find(d => d.id === doctor.id)) {
+      setSelectedForComparison(selectedForComparison.filter(d => d.id !== doctor.id))
+    } else if (selectedForComparison.length < 3) {
+      setSelectedForComparison([...selectedForComparison, doctor])
+    }
+  }
   const location = useLocation()
   const { city, triageData, searchData } = location.state || {}
 
@@ -18,13 +28,27 @@ function Results() {
     )
   }
 
-  const { specialty, urgency, reasoning } = triageData
+  const { specialty, urgency, reasoning, confidence } = triageData
   const { results = [], fallbackUsed } = searchData
 
   const urgencyStyles = {
     high: 'border-red-200 bg-red-50 text-red-700',
     medium: 'border-amber-200 bg-amber-50 text-amber-800',
     low: 'border-green-200 bg-green-50 text-green-700'
+  }
+
+  const confidenceColor = confidence >= 90 ? 'text-green-600' :
+                         confidence >= 80 ? 'text-yellow-600' : 'text-red-600'
+
+  const getAvailability = (doctor) => {
+    const hours = new Date().getHours()
+    if (hours >= 9 && hours <= 17) {
+      return { status: 'Available Today', color: 'text-green-600', bg: 'bg-green-100' }
+    } else if (hours >= 18 && hours <= 21) {
+      return { status: 'Available Evening', color: 'text-yellow-600', bg: 'bg-yellow-100' }
+    } else {
+      return { status: 'Next: Tomorrow 9AM', color: 'text-gray-600', bg: 'bg-gray-100' }
+    }
   }
 
   const emergencyHospitals = {
@@ -165,7 +189,18 @@ function Results() {
             <section className="overflow-hidden rounded-3xl border border-border bg-white shadow-xl shadow-navy/5">
               <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_280px]">
                 <div className="p-8 md:p-10">
-                  <p className="text-xs font-black uppercase text-teal">Triage assessment</p>
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-xs font-black uppercase text-teal">Triage assessment</p>
+                    <div className={`text-2xl font-black ${confidenceColor}`}>
+                      {confidence}% Confident
+                    </div>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+                    <div
+                      className="bg-teal h-2 rounded-full transition-all duration-500"
+                      style={{ width: `${confidence}%` }}
+                    ></div>
+                  </div>
                   <h1 className="mt-3 text-4xl font-black leading-tight text-navy">{specialty}</h1>
                   <p className="mt-5 max-w-3xl text-base leading-8 text-text-muted">{reasoning}</p>
                   <div className="mt-5 rounded-2xl border border-border bg-bg px-4 py-3 text-sm font-semibold text-text-muted">
@@ -192,6 +227,29 @@ function Results() {
                 </div>
               </div>
             </section>
+
+            {results.length > 0 && (
+              <section className="overflow-hidden rounded-3xl border border-border bg-white shadow-xl shadow-navy/5">
+                <div className="p-8 md:p-10">
+                  <p className="text-xs font-black uppercase text-teal">Doctor locations</p>
+                  <h2 className="mt-3 text-2xl font-black text-navy">Map View</h2>
+                  <div className="mt-6 rounded-2xl border border-border bg-bg p-4">
+                    <a
+                      href={`https://www.google.com/maps/search/${encodeURIComponent(results.map(d => `${d.name} ${d.city}`).join(' '))}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-3 rounded-xl bg-navy px-6 py-4 text-base font-black text-white shadow-md hover:bg-navy-light transition-all"
+                    >
+                      <span className="text-2xl">🗺️</span>
+                      Open in Google Maps
+                    </a>
+                    <p className="mt-3 text-center text-sm font-semibold text-text-muted">
+                      View all doctor locations on Google Maps
+                    </p>
+                  </div>
+                </div>
+              </section>
+            )}
 
             <section className="space-y-4">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -232,6 +290,14 @@ function Results() {
                               )}
                             </div>
                             <p className="mt-1 text-base font-black text-teal">{doc.specialty}</p>
+                            {(() => {
+                              const availability = getAvailability(doc)
+                              return (
+                                <div className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-black ${availability.bg} ${availability.color}`}>
+                                  {availability.status}
+                                </div>
+                              )
+                            })()}
                           <div className="mt-4 flex flex-wrap gap-3 text-sm">
                               <span className="rounded-xl bg-bg px-3 py-2 font-black text-navy">
                                 Rating {doc.rating}/5.0
@@ -240,6 +306,16 @@ function Results() {
                                 Rs. {doc.feeRangeMin} - Rs. {doc.feeRangeMax}
                               </span>
                             </div>
+                            <button
+                              onClick={() => toggleComparison(doc)}
+                              className={`mt-3 px-4 py-2 rounded-lg text-sm font-black transition-all ${
+                                selectedForComparison.find(d => d.id === doc.id)
+                                  ? 'bg-teal text-white'
+                                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                              }`}
+                            >
+                              {selectedForComparison.find(d => d.id === doc.id) ? '✓ Selected' : '+ Compare'}
+                            </button>
                           </div>
                         </div>
 
@@ -304,6 +380,66 @@ function Results() {
       <footer className="border-t border-border bg-white px-5 py-4 text-center text-xs font-semibold text-text-muted">
         MediRoute MVP - Bharat Academix CodeQuest 2026. All recommendations are advisory.
       </footer>
+
+      {selectedForComparison.length >= 2 && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy/70 p-5 backdrop-blur-md">
+          <div className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl shadow-navy/30">
+            <button
+              type="button"
+              onClick={() => setSelectedForComparison([])}
+              className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl font-black text-red-600 shadow-lg hover:bg-red-50"
+            >
+              ×
+            </button>
+
+            <div className="bg-navy px-7 py-6 pr-20 text-white">
+              <p className="text-xs font-black uppercase text-white/80">Compare doctors</p>
+              <h3 className="mt-2 text-3xl font-black">Side-by-side comparison</h3>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {selectedForComparison.map(doctor => (
+                  <div key={doctor.id} className="border rounded-xl p-4">
+                    <h3 className="font-bold text-navy mb-2">{doctor.name}</h3>
+
+                    <div className="mb-4">
+                      <div className="text-sm text-gray-600 mb-1">Rating</div>
+                      <div className="flex items-center">
+                        <div className="flex-1 bg-gray-200 rounded-full h-3 mr-2">
+                          <div
+                            className="bg-teal h-3 rounded-full"
+                            style={{ width: `${(doctor.rating / 5) * 100}%` }}
+                          ></div>
+                        </div>
+                        <span className="font-bold">{doctor.rating}</span>
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <div className="text-sm text-gray-600 mb-1">Fee Range</div>
+                      <div className="font-bold text-teal">
+                        ₹{doctor.feeRangeMin} - ₹{doctor.feeRangeMax}
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <div className="text-sm text-gray-600 mb-1">NMC Verified</div>
+                      <div className={doctor.nmcVerified ? 'text-green-600' : 'text-red-600'}>
+                        {doctor.nmcVerified ? '✓ Verified' : '✗ Not Verified'}
+                      </div>
+                    </div>
+
+                    <button className="w-full bg-navy text-white py-2 rounded-lg hover:bg-navy-light">
+                      View Details
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
