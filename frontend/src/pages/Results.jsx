@@ -26,23 +26,28 @@ function Results() {
   const emergencyHospitals = {
     Delhi: [
       { name: 'AIIMS Emergency Department', phone: '011-26588500', location: 'Ansari Nagar, New Delhi' },
-      { name: 'Max Super Speciality Hospital', phone: '011-26515050', location: 'Saket, New Delhi' }
+      { name: 'Max Super Speciality Hospital', phone: '011-26515050', location: 'Saket, New Delhi' },
+      { name: 'Safdarjung Hospital', phone: '011-26165060', location: 'Ansari Nagar West, New Delhi' }
     ],
     Mumbai: [
       { name: 'KEM Hospital Emergency Room', phone: '022-24107000', location: 'Parel, Mumbai' },
-      { name: 'Kokilaben Dhirubhai Ambani Hospital', phone: '022-30999999', location: 'Andheri West, Mumbai' }
+      { name: 'Kokilaben Dhirubhai Ambani Hospital', phone: '022-30999999', location: 'Andheri West, Mumbai' },
+      { name: 'Lilavati Hospital', phone: '022-26468000', location: 'Bandra West, Mumbai' }
     ],
     Jaipur: [
       { name: 'SMS Hospital Emergency Ward', phone: '0141-2560291', location: 'Ashok Nagar, Jaipur' },
-      { name: 'Fortis Escorts Hospital', phone: '0141-2547000', location: 'Malviya Nagar, Jaipur' }
+      { name: 'Fortis Escorts Hospital', phone: '0141-2547000', location: 'Malviya Nagar, Jaipur' },
+      { name: 'Mahatma Gandhi Hospital', phone: '0141-2771777', location: 'Sitapura, Jaipur' }
     ],
     Goa: [
       { name: 'Goa Medical College Emergency', phone: '0832-2458727', location: 'Bambolim, Goa' },
-      { name: 'Manipal Hospital Goa', phone: '0832-3048800', location: 'Dona Paula, Goa' }
+      { name: 'Manipal Hospital Goa', phone: '0832-3048800', location: 'Dona Paula, Goa' },
+      { name: 'Healthway Hospital', phone: '0832-2495555', location: 'Old Goa' }
     ],
     Bangalore: [
       { name: 'NIMHANS Casualty Services', phone: '080-26995000', location: 'Hosur Road, Bangalore' },
-      { name: 'St. John\'s Medical College Hospital', phone: '080-22065000', location: 'Sarjapur Road, Bangalore' }
+      { name: 'St. John\'s Medical College Hospital', phone: '080-22065000', location: 'Sarjapur Road, Bangalore' },
+      { name: 'Apollo Hospitals', phone: '080-26304050', location: 'Bannerghatta Road, Bangalore' }
     ]
   }
 
@@ -63,7 +68,7 @@ function Results() {
     // Body text
     doc.setTextColor(30, 39, 97)
     doc.setFontSize(14)
-    doc.text(`Triage Details for: ${city}`, 15, 45)
+    doc.text(`Emergency Info for: ${city}`, 15, 45)
 
     doc.setFont('helvetica', 'normal')
     doc.setFontSize(10)
@@ -71,43 +76,35 @@ function Results() {
     doc.text(`Generated on: ${new Date().toLocaleString()}`, 15, 52)
     doc.line(15, 55, 195, 55)
 
-    // Urgency
+    // Blood Group and National Emergency Line
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(12)
-    doc.setTextColor(urgency === 'high' ? 220 : 30, urgency === 'high' ? 38 : 39, urgency === 'high' ? 38 : 97)
-    doc.text(`URGENCY LEVEL: ${urgency.toUpperCase()}`, 15, 65)
+    doc.setTextColor(220, 38, 38)
+    doc.text(`NATIONAL EMERGENCY: 112`, 15, 65)
 
-    // Symptom Summary
-    doc.setFont('helvetica', 'normal')
-    doc.setFontSize(11)
     doc.setTextColor(30, 39, 97)
-    doc.text('Symptom Input:', 15, 75)
-    doc.setTextColor(80, 80, 80)
-    const splitSymptoms = doc.splitTextToSize(symptomText, 180)
-    doc.text(splitSymptoms, 15, 82)
+    doc.text(`BLOOD GROUP: _____________________`, 100, 65)
 
     // Triage Recommendation
-    const yOffsetAfterSymptoms = 85 + (splitSymptoms.length * 6)
-    doc.setFont('helvetica', 'bold')
-    doc.setTextColor(30, 39, 97)
-    doc.text('AI Recommendation:', 15, yOffsetAfterSymptoms)
+    doc.setFontSize(11)
+    doc.text('AI Recommendation:', 15, 80)
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(80, 80, 80)
-    doc.text(`Recommended Specialist: ${specialty}`, 15, yOffsetAfterSymptoms + 7)
+    doc.text(`Recommended Specialist: ${specialty}`, 15, 87)
     
     const splitReasoning = doc.splitTextToSize(reasoning, 180)
-    doc.text(splitReasoning, 15, yOffsetAfterSymptoms + 14)
+    doc.text(splitReasoning, 15, 94)
 
     // City Emergency Care
-    const yOffsetAfterReasoning = yOffsetAfterSymptoms + 20 + (splitReasoning.length * 6)
+    const yOffsetAfterReasoning = 100 + (splitReasoning.length * 6)
     doc.setFont('helvetica', 'bold')
     doc.setTextColor(30, 39, 97)
-    doc.text(`Emergency Medical Providers in ${city}:`, 15, yOffsetAfterReasoning)
+    doc.text(`Top 3 Emergency Providers in ${city}:`, 15, yOffsetAfterReasoning)
     
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(80, 80, 80)
     let yPos = yOffsetAfterReasoning + 7
-    cityHospitals.forEach((hosp) => {
+    cityHospitals.slice(0, 3).forEach((hosp) => {
       doc.text(`- ${hosp.name} (${hosp.location})`, 15, yPos)
       doc.text(`  Phone: ${hosp.phone}`, 15, yPos + 5)
       yPos += 14
@@ -139,7 +136,7 @@ function Results() {
             to="/"
             className="bg-navy-light hover:bg-navy-dark text-white font-bold text-xs uppercase px-4 py-2.5 rounded-lg border border-border/20 transition-all"
           >
-            ← New Search
+            Search Again
           </Link>
         </div>
       </header>
@@ -153,7 +150,7 @@ function Results() {
               <div className="text-left">
                 <h4 className="font-extrabold text-lg">High Urgency Situation Detected</h4>
                 <p className="text-sm text-white/90 leading-tight">
-                  Your symptoms suggest a potential medical emergency. Please seek immediate assistance.
+                  This may be urgent — consider calling 112 or visiting the nearest emergency room
                 </p>
               </div>
             </div>

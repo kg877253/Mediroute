@@ -17,23 +17,28 @@ function Home() {
   const emergencyHospitals = {
     Delhi: [
       { name: 'AIIMS Emergency Department', phone: '011-26588500', location: 'Ansari Nagar, New Delhi' },
-      { name: 'Max Super Speciality Hospital', phone: '011-26515050', location: 'Saket, New Delhi' }
+      { name: 'Max Super Speciality Hospital', phone: '011-26515050', location: 'Saket, New Delhi' },
+      { name: 'Safdarjung Hospital', phone: '011-26165060', location: 'Ansari Nagar West, New Delhi' }
     ],
     Mumbai: [
       { name: 'KEM Hospital Emergency Room', phone: '022-24107000', location: 'Parel, Mumbai' },
-      { name: 'Kokilaben Dhirubhai Ambani Hospital', phone: '022-30999999', location: 'Andheri West, Mumbai' }
+      { name: 'Kokilaben Dhirubhai Ambani Hospital', phone: '022-30999999', location: 'Andheri West, Mumbai' },
+      { name: 'Lilavati Hospital', phone: '022-26468000', location: 'Bandra West, Mumbai' }
     ],
     Jaipur: [
       { name: 'SMS Hospital Emergency Ward', phone: '0141-2560291', location: 'Ashok Nagar, Jaipur' },
-      { name: 'Fortis Escorts Hospital', phone: '0141-2547000', location: 'Malviya Nagar, Jaipur' }
+      { name: 'Fortis Escorts Hospital', phone: '0141-2547000', location: 'Malviya Nagar, Jaipur' },
+      { name: 'Mahatma Gandhi Hospital', phone: '0141-2771777', location: 'Sitapura, Jaipur' }
     ],
     Goa: [
       { name: 'Goa Medical College Emergency', phone: '0832-2458727', location: 'Bambolim, Goa' },
-      { name: 'Manipal Hospital Goa', phone: '0832-3048800', location: 'Dona Paula, Goa' }
+      { name: 'Manipal Hospital Goa', phone: '0832-3048800', location: 'Dona Paula, Goa' },
+      { name: 'Healthway Hospital', phone: '0832-2495555', location: 'Old Goa' }
     ],
     Bangalore: [
       { name: 'NIMHANS Casualty Services', phone: '080-26995000', location: 'Hosur Road, Bangalore' },
-      { name: 'St. John\'s Medical College Hospital', phone: '080-22065000', location: 'Sarjapur Road, Bangalore' }
+      { name: 'St. John\'s Medical College Hospital', phone: '080-22065000', location: 'Sarjapur Road, Bangalore' },
+      { name: 'Apollo Hospitals', phone: '080-26304050', location: 'Bannerghatta Road, Bangalore' }
     ]
   }
 
@@ -97,8 +102,8 @@ function Home() {
               <h1 className="text-2xl font-bold tracking-tight">
                 Medi<span className="text-teal-light">Route</span>
               </h1>
-              <p className="text-[10px] text-white/60 tracking-wider uppercase font-semibold">
-                Healthcare Navigation
+              <p className="text-xs text-white/70 font-medium">
+                Right doctor. Right cost. Right now.
               </p>
             </div>
           </div>
@@ -163,7 +168,7 @@ function Home() {
                 <textarea
                   value={symptomText}
                   onChange={(e) => setSymptomText(e.target.value)}
-                  placeholder="e.g., I have had a dull pain behind my eyes and a severe headache for 2 days..."
+                  placeholder="Describe how you're feeling..."
                   rows={4}
                   className="w-full border border-border rounded-xl p-4 focus:ring-2 focus:ring-teal/20 focus:border-teal outline-none resize-none text-text bg-bg-soft/30"
                   disabled={loading}
@@ -216,7 +221,7 @@ function Home() {
                     type="submit"
                     className="w-full bg-teal hover:bg-teal-light text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer transform hover:-translate-y-[1px]"
                   >
-                    Begin Triage Analysis
+                    Find My Doctor
                   </button>
                 )}
               </div>
