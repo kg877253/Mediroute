@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 const cities = ['Delhi', 'Mumbai', 'Jaipur', 'Goa', 'Bangalore']
 const quickSymptoms = [
   { label: 'Chest pain', text: 'I have chest pain and difficulty breathing' },
@@ -15,16 +17,38 @@ export default function SearchForm({
   error, setError,
   onSubmit
 }) {
+  const [isListening, setIsListening] = useState(false)
+
+  const startVoiceInput = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    if (!SpeechRecognition) {
+      alert("Speech recognition is not supported on this browser.")
+      return
+    }
+
+    const recognition = new SpeechRecognition()
+    recognition.lang = 'en-IN'
+    recognition.continuous = false
+
+    recognition.onstart = () => setIsListening(true)
+    recognition.onend = () => setIsListening(false)
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript
+      setSymptomText(transcript)
+    }
+
+    recognition.start()
+  }
+
   return (
     <div style={{
       borderRadius: '1.5rem',
       border: '1px solid #e2e8f0',
       background: '#ffffff',
       boxShadow: '0 4px 24px rgba(30,39,97,0.08)',
-      overflow: 'hidden'   /* ONE place — clips everything cleanly */
+      overflow: 'hidden'
     }}>
-
-      {/* ── Navy header — safely inside overflow:hidden parent ── */}
       <div style={{
         background: 'linear-gradient(135deg, #1E2761 0%, #2E3B87 100%)',
         padding: '1.25rem 1.5rem'
@@ -40,14 +64,24 @@ export default function SearchForm({
         </p>
       </div>
 
-      {/* ── Form body ── */}
       <form onSubmit={onSubmit} style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-
-        {/* Textarea */}
         <div>
-          <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">
-            What symptoms are you experiencing?
-          </label>
+          <div className="flex justify-between items-center mb-1.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              What symptoms are you experiencing?
+            </label>
+            <button
+              type="button"
+              onClick={startVoiceInput}
+              className={`text-xs font-bold flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all border ${
+                isListening
+                  ? 'bg-red-500 text-white border-red-500 animate-pulse'
+                  : 'bg-teal/5 text-teal border-teal/10 hover:bg-teal/10'
+              }`}
+            >
+              <span>{isListening ? 'Listening...' : 'Speak Symptoms'}</span>
+            </button>
+          </div>
           <textarea
             value={symptomText}
             onChange={(e) => setSymptomText(e.target.value)}
@@ -58,7 +92,6 @@ export default function SearchForm({
           />
         </div>
 
-        {/* City */}
         <div>
           <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">
             Select City
@@ -80,7 +113,6 @@ export default function SearchForm({
           </div>
         </div>
 
-        {/* Quick chips */}
         <div>
           <p className="mb-1.5 text-xs font-bold uppercase tracking-wider text-slate-500">Quick Symptoms</p>
           <div className="flex flex-wrap gap-2">
@@ -99,7 +131,6 @@ export default function SearchForm({
           </div>
         </div>
 
-        {/* Error */}
         {error && (
           <div className="rounded-xl border border-red-100 bg-red-50 p-3 flex items-start gap-2.5">
             <svg className="h-4 w-4 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -113,11 +144,13 @@ export default function SearchForm({
           </div>
         )}
 
-        {/* Submit / Loading */}
         {loading ? (
           <div className="rounded-xl border border-slate-100 bg-slate-50 p-4 flex flex-col items-center gap-2.5">
             <div className="h-8 w-8 rounded-full border-4 border-teal/10 border-t-teal animate-spin" />
             <p className="text-sm font-bold text-navy">{loadingPhase}</p>
+            <p className="text-[10px] text-center text-amber-600 font-semibold max-w-xs animate-pulse">
+              Note: Backend hosted on a free Render instance can take up to 50 seconds to initialize during cold starts.
+            </p>
             <div className="w-36 bg-slate-200 rounded-full h-1 overflow-hidden">
               <div className="bg-teal h-1 rounded-full transition-all duration-500"
                 style={{ width: loadingPhase.includes('Analyzing') ? '45%' : '90%' }} />
