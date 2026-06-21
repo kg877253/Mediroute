@@ -20,9 +20,9 @@ export default function SearchForm({
   onSubmit
 }) {
   return (
-    <div className="rounded-3xl border border-slate-100 bg-white shadow-lg overflow-hidden">
+    <div className="rounded-3xl border border-slate-100 bg-white shadow-lg overflow-visible">
       {/* Card Header — fixed: stacked layout instead of flex row to prevent clipping */}
-      <div className="border-b border-slate-100 px-7 py-5 bg-gradient-to-br from-navy to-navy-light">
+      <div className="border-b border-slate-100 px-6 py-5 rounded-t-3xl bg-gradient-to-br from-navy to-navy-light overflow-hidden">
         <p className="text-[10px] font-bold uppercase tracking-widest text-teal-light">
           Start a care route
         </p>

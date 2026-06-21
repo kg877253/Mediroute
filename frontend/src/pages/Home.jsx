@@ -98,7 +98,7 @@ function Home() {
 
         <RecentSearches history={history} onSelectHistory={handleSelectHistory} />
 
-        <section className="grid items-start gap-6 lg:grid-cols-[1.1fr_0.9fr] w-full">
+        <section className="grid items-start gap-6 lg:grid-cols-[1fr_1fr] w-full min-h-[calc(100vh-220px)]">
           <Hero />
           <div className="w-full">
             <SearchForm

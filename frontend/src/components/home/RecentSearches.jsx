@@ -2,7 +2,7 @@ export default function RecentSearches({ history, onSelectHistory }) {
   if (!history || history.length === 0) return null
 
   return (
-    <div className="w-full mb-4">
+    <div className="w-full mb-5">
       <div className="rounded-2xl border border-slate-100 bg-white/80 backdrop-blur-sm px-5 py-3.5 shadow-sm">
         <div className="flex items-center gap-2 mb-3">
           <svg className="h-3.5 w-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
