@@ -114,10 +114,10 @@ function Home() {
 
       <Header onOpenEmergency={openEmergencyMode} />
 
-      <main className="max-w-7xl mx-auto px-6 w-full flex-1 flex flex-col justify-center relative z-10">
+      <main className="max-w-7xl mx-auto px-6 w-full flex-1 flex flex-col relative z-10">
         <RecentSearches history={history} onSelectHistory={handleSelectHistory} />
 
-        <div className="py-6 lg:py-10 flex-1 flex items-center min-h-[calc(100vh-180px)]">
+        <div className="py-8 lg:py-12 flex-1 flex items-start">
           <section className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] w-full">
             <Hero />
 
