@@ -46,7 +46,6 @@ function Home() {
     }
     setError('')
     setLoading(true)
-
     try {
       setLoadingPhase('Analyzing symptoms with Gemini AI')
       const triageRes = await fetch(`${apiBaseUrl}/api/triage`, {
@@ -86,34 +85,29 @@ function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-bg font-sans text-text flex flex-col relative overflow-hidden bg-grid-pattern">
-      {/* Decorative blobs */}
+    <div className="min-h-screen bg-bg font-sans text-text flex flex-col relative overflow-x-hidden bg-grid-pattern">
       <div className="absolute top-[15%] left-[5%] w-[300px] h-[300px] rounded-full bg-teal/5 blur-3xl pointer-events-none -z-10" />
       <div className="absolute bottom-[15%] right-[5%] w-[400px] h-[400px] rounded-full bg-navy/5 blur-3xl pointer-events-none -z-10" />
 
       <Header onOpenEmergency={openEmergencyMode} />
 
-      {/* Main — items-start, no min-h calc, no justify-center = no dead space */}
-      <main className="max-w-7xl mx-auto px-6 w-full flex-1 flex flex-col py-6 relative z-10">
-
+      <main className="w-full max-w-7xl mx-auto px-8 flex-1 flex flex-col py-6 relative z-10">
         <RecentSearches history={history} onSelectHistory={handleSelectHistory} />
 
-        <section className="grid items-start gap-6 lg:grid-cols-[1fr_1fr] w-full min-h-[calc(100vh-220px)]">
+        <div className="flex-1 grid items-start gap-8 lg:grid-cols-2 w-full pt-2">
           <Hero />
-          <div className="w-full">
-            <SearchForm
-              symptomText={symptomText}
-              setSymptomText={setSymptomText}
-              city={city}
-              setCity={setCity}
-              loading={loading}
-              loadingPhase={loadingPhase}
-              error={error}
-              setError={setError}
-              onSubmit={handleSubmit}
-            />
-          </div>
-        </section>
+          <SearchForm
+            symptomText={symptomText}
+            setSymptomText={setSymptomText}
+            city={city}
+            setCity={setCity}
+            loading={loading}
+            loadingPhase={loadingPhase}
+            error={error}
+            setError={setError}
+            onSubmit={handleSubmit}
+          />
+        </div>
       </main>
 
       <Footer />
