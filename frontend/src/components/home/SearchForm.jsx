@@ -5,7 +5,7 @@ const quickSymptoms = [
   { label: 'Tooth pain', text: 'My tooth hurts badly when I eat' },
   { label: 'Child fever', text: 'My child has fever and cough' },
   { label: 'Ear pain', text: 'I have ear pain and blocked nose' },
-  { label: 'Severe headache', text: 'I have severe headache with nausea' }
+  { label: 'Headache', text: 'I have severe headache with nausea' }
 ]
 
 export default function SearchForm({
@@ -16,130 +16,103 @@ export default function SearchForm({
   onSubmit
 }) {
   return (
-    <div style={{
-      borderRadius: '1.5rem',
-      border: '1px solid #e2e8f0',
-      background: '#ffffff',
-      boxShadow: '0 4px 24px rgba(30,39,97,0.08)',
-      overflow: 'hidden'   /* ONE place — clips everything cleanly */
-    }}>
-
-      {/* ── Navy header — safely inside overflow:hidden parent ── */}
-      <div style={{
-        background: 'linear-gradient(135deg, #1E2761 0%, #2E3B87 100%)',
-        padding: '1.25rem 1.5rem'
-      }}>
-        <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#039EAF', margin: 0 }}>
+    <section className="rounded-[14px] border border-hairline-gray bg-linen-white p-[35px] md:p-[42px]">
+      <div className="mb-[28px]">
+        <div className="inline-flex rounded-full bg-mist-blue px-[14px] py-[7px] text-[12px] font-normal text-forest-ink">
           Start a care route
-        </p>
-        <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#ffffff', margin: '0.25rem 0 0', lineHeight: 1.2 }}>
-          Describe Your Symptoms
+        </div>
+        <h3 className="font-display mt-[14px] text-[40px] font-light leading-[1.15] tracking-[-0.4px] text-forest-ink">
+          Describe symptoms
         </h3>
-        <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', margin: '0.25rem 0 0' }}>
-          AI matches your symptoms to the right specialist
+        <p className="mt-[11px] text-[14px] font-normal leading-[1.5] text-charcoal">
+          The app recommends a specialty and searches verified doctors in your selected city.
         </p>
       </div>
 
-      {/* ── Form body ── */}
-      <form onSubmit={onSubmit} style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-
-        {/* Textarea */}
+      <form onSubmit={onSubmit} className="flex flex-col gap-[21px]">
         <div>
-          <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">
-            What symptoms are you experiencing?
+          <label className="mb-[9px] block text-[12px] font-normal uppercase text-charcoal">
+            Symptoms
           </label>
           <textarea
             value={symptomText}
             onChange={(e) => setSymptomText(e.target.value)}
-            placeholder="e.g. 'I have a dry cough, mild fever, and shortness of breath starting yesterday'..."
-            rows={4}
+            placeholder="Example: I have a dry cough, mild fever, and shortness of breath..."
+            rows={6}
             disabled={loading}
-            className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-navy placeholder-slate-400 outline-none focus:border-teal focus:bg-white transition-all leading-relaxed"
+            className="w-full resize-none rounded-[14px] border border-hairline-gray bg-linen px-[21px] py-[18px] text-[18px] font-normal leading-[1.5] text-true-black outline-none placeholder:text-graphite/60 focus:border-forest-ink focus:bg-linen-white"
           />
         </div>
 
-        {/* City */}
-        <div>
-          <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">
-            Select City
-          </label>
-          <div className="relative">
+        <div className="grid gap-[21px] md:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <label className="mb-[9px] block text-[12px] font-normal uppercase text-charcoal">
+              City
+            </label>
             <select
               value={city}
               onChange={(e) => setCity(e.target.value)}
               disabled={loading}
-              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-navy outline-none appearance-none cursor-pointer"
+              className="h-[56px] w-full rounded-[14px] border border-hairline-gray bg-linen-white px-[21px] text-[14px] font-normal text-true-black outline-none focus:border-forest-ink"
             >
               {cities.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
-            <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
+          </div>
+
+          <div>
+            <p className="mb-[9px] text-[12px] font-normal uppercase text-charcoal">Quick symptoms</p>
+            <div className="flex flex-wrap gap-[9px]">
+              {quickSymptoms.map((s) => (
+                <button
+                  key={s.label}
+                  type="button"
+                  onClick={() => setSymptomText(s.text)}
+                  disabled={loading}
+                  className="rounded-full bg-mist-blue px-[14px] py-[7px] text-[12px] font-normal text-forest-ink hover:bg-mint-veil"
+                >
+                  {s.label}
+                </button>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Quick chips */}
-        <div>
-          <p className="mb-1.5 text-xs font-bold uppercase tracking-wider text-slate-500">Quick Symptoms</p>
-          <div className="flex flex-wrap gap-2">
-            {quickSymptoms.map((s) => (
-              <button
-                key={s.label}
-                type="button"
-                onClick={() => setSymptomText(s.text)}
-                disabled={loading}
-                className="flex items-center gap-1.5 rounded-lg border border-slate-100 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-navy hover:border-teal/40 hover:bg-teal/5 hover:text-teal transition-all cursor-pointer"
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-teal shrink-0" />
-                {s.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Error */}
         {error && (
-          <div className="rounded-xl border border-red-100 bg-red-50 p-3 flex items-start gap-2.5">
-            <svg className="h-4 w-4 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-            <div>
-              <p className="text-xs font-bold text-red-900">{error}</p>
-              <button type="button" onClick={() => { setError(''); onSubmit({ preventDefault: () => {} }) }}
-                className="mt-1 text-xs font-bold text-red-600 underline">Try Again</button>
-            </div>
+          <div className="rounded-[14px] border border-red-200 bg-red-50 px-[21px] py-[14px] text-[14px] font-normal leading-[1.5] text-red-700">
+            <p>{error}</p>
+            <button
+              type="button"
+              onClick={() => { setError(''); onSubmit({ preventDefault: () => {} }) }}
+              className="mt-[7px] underline"
+            >
+              Try again
+            </button>
           </div>
         )}
 
-        {/* Submit / Loading */}
         {loading ? (
-          <div className="rounded-xl border border-slate-100 bg-slate-50 p-4 flex flex-col items-center gap-2.5">
-            <div className="h-8 w-8 rounded-full border-4 border-teal/10 border-t-teal animate-spin" />
-            <p className="text-sm font-bold text-navy">{loadingPhase}</p>
-            <div className="w-36 bg-slate-200 rounded-full h-1 overflow-hidden">
-              <div className="bg-teal h-1 rounded-full transition-all duration-500"
-                style={{ width: loadingPhase.includes('Analyzing') ? '45%' : '90%' }} />
+          <div className="rounded-[14px] border border-hairline-gray bg-linen px-[21px] py-[18px]">
+            <p className="text-[14px] font-normal text-forest-ink">{loadingPhase}</p>
+            <div className="mt-[14px] h-[4px] overflow-hidden rounded-full bg-hairline-gray">
+              <div
+                className="h-[4px] rounded-full bg-forest-ink"
+                style={{ width: loadingPhase.includes('Analyzing') ? '45%' : '90%' }}
+              />
             </div>
           </div>
         ) : (
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold text-white cursor-pointer transition-all hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0"
-            style={{ background: 'linear-gradient(135deg, #028090, #015D69)', boxShadow: '0 4px 14px rgba(2,128,144,0.35)' }}
+            className="inline-flex min-h-[56px] items-center justify-center rounded-[14px] bg-forest-ink px-[21px] py-[14px] text-[14px] font-normal text-linen-white hover:bg-navy-light"
           >
             Find My Doctor
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
           </button>
         )}
 
-        <p className="text-center text-[10px] text-slate-400">
-          Navigation only · Not a substitute for professional medical advice
+        <p className="text-center text-[12px] font-normal text-charcoal">
+          Navigation only. Not a substitute for professional medical advice.
         </p>
       </form>
-    </div>
+    </section>
   )
 }
