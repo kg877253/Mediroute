@@ -2,20 +2,32 @@
 
 @theme {
   --color-navy: #1E2761;
-  --color-navy-light: #2a3578;
-  --color-navy-dark: #151c4a;
+  --color-navy-light: #2E3B87;
+  --color-navy-dark: #12183A;
   --color-teal: #028090;
-  --color-teal-light: #03a3b8;
-  --color-teal-dark: #016570;
-  --color-bg: #f8fafc;
-  --color-bg-soft: #f1f5f9;
+  --color-teal-light: #039EAF;
+  --color-teal-dark: #015D69;
+  --color-bg: #F8FAFC;
+  --color-bg-soft: #F1F5F9;
   --color-text: #1E2761;
-  --color-text-muted: #5a6178;
-  --color-border: #e2e5ef;
-  --color-danger: #dc2626;
-  --color-success: #16a34a;
-  --color-warning: #f59e0b;
+  --color-text-muted: #64748B;
+  --color-border: #E2E8F0;
+  --color-danger: #EF4444;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
   --font-sans: "Inter", sans-serif;
+  
+  --animate-pulse-subtle: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 3s ease-in-out infinite;
+  
+  @keyframes pulse-subtle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .7; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
 }
 
 *,
@@ -28,6 +40,7 @@
 
 html {
   background-color: var(--color-bg);
+  scroll-behavior: smooth;
 }
 
 body {
@@ -51,7 +64,7 @@ button,
 input,
 select,
 textarea {
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 a {
@@ -61,4 +74,21 @@ a {
 
 a:hover {
   color: var(--color-teal-light);
+}
+
+/* Hide scrollbar utility for horizontal scroll boxes */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Subtle background grid effect */
+.bg-grid-pattern {
+  background-size: 30px 30px;
+  background-image: 
+    linear-gradient(to right, rgba(30, 39, 97, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 39, 97, 0.03) 1px, transparent 1px);
 }

@@ -139,162 +139,222 @@ function Results() {
   }
 
   return (
-    <div className="min-h-screen bg-bg font-sans text-text flex flex-col">
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-navy shadow-lg">
+    <div className="min-h-screen bg-bg font-sans text-text flex flex-col relative overflow-hidden bg-grid-pattern">
+      {/* Decorative gradient blur background shapes */}
+      <div className="absolute top-[15%] right-[5%] w-[400px] h-[400px] rounded-full bg-teal/5 blur-3xl pointer-events-none -z-10" />
+      <div className="absolute bottom-[30%] left-[5%] w-[350px] h-[350px] rounded-full bg-navy/5 blur-3xl pointer-events-none -z-10" />
+
+      {/* Header */}
+      <header className="sticky top-0 z-40 border-b border-white/5 bg-navy/95 backdrop-blur-md shadow-md">
         <div className="flex items-center justify-between max-w-7xl mx-auto px-6 py-4">
-          <Link to="/" className="flex items-center gap-3 text-white hover:text-white">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-2xl font-bold text-teal shadow-md">
-              +
+          <Link to="/" className="flex items-center gap-3.5 group">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-teal to-teal-dark text-xl font-bold text-white shadow-md shadow-teal/20 group-hover:scale-105 transition-transform duration-300">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
             </div>
             <div>
-              <p className="text-2xl font-bold leading-none">
+              <p className="text-xl font-extrabold tracking-tight leading-none text-white">
                 Medi<span className="text-teal-light">Route</span>
               </p>
-              <p className="mt-1 text-xs font-semibold text-white/70">{city} care route</p>
+              <p className="mt-1 text-[10px] font-medium tracking-wide uppercase text-slate-400">
+                {city} care route
+              </p>
             </div>
           </Link>
 
           <Link
             to="/"
-            className="rounded-xl bg-white/10 px-5 py-3 text-xs font-semibold uppercase text-white hover:bg-white/20 hover:text-white transition-all"
+            className="rounded-xl bg-white/10 border border-white/10 hover:bg-white/20 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition-all hover:scale-105 active:scale-95 duration-200"
           >
             Search Again
           </Link>
         </div>
       </header>
 
-      <main className="w-full max-w-7xl mx-auto px-6 py-10 lg:py-12 flex-1">
+      <main className="w-full max-w-7xl mx-auto px-6 py-8 md:py-10 flex-1 relative z-10">
+        {/* High Urgency Notification Banner */}
         {urgency === 'high' && (
-          <section className="mb-6 rounded-3xl border border-red-200 bg-red-600 p-5 text-white shadow-xl shadow-red-950/10">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className="text-xs font-semibold uppercase text-white/80">High urgency detected</p>
-                <h1 className="mt-1 text-2xl font-bold">Call 112 or visit the nearest emergency room.</h1>
-                <p className="mt-1 text-sm text-white/90">MediRoute is advisory. Use emergency services for critical symptoms.</p>
+          <section className="mb-8 rounded-3xl border border-red-200 bg-gradient-to-r from-red-600 to-red-700 p-6 text-white shadow-lg shadow-red-950/15 relative overflow-hidden">
+            <div className="absolute right-0 top-0 translate-x-8 -translate-y-8 text-white/5 font-black text-[120px] pointer-events-none">+</div>
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between relative z-10">
+              <div className="flex items-start gap-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-white">
+                  <svg className="h-6 w-6 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </span>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-white/80">Critical Attention Required</p>
+                  <h1 className="mt-0.5 text-xl md:text-2xl font-extrabold tracking-tight">Call 112 or visit the nearest emergency department</h1>
+                  <p className="mt-1 text-sm text-red-100 max-w-2xl leading-relaxed">
+                    MediRoute has detected high urgency symptoms. Please proceed directly to medical emergency personnel.
+                  </p>
+                </div>
               </div>
-              <a href="tel:112" className="inline-flex rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-red-600 shadow-md hover:bg-red-50 hover:text-red-700 transition-all">
-                Call 112
+              <a 
+                href="tel:112" 
+                className="inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-bold text-red-600 shadow-md hover:bg-red-50 hover:shadow-lg transition-all hover:-translate-y-0.5 active:scale-95 duration-200 shrink-0"
+              >
+                <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                Call 112 Now
               </a>
             </div>
           </section>
         )}
 
-        <section className="grid gap-9 lg:grid-cols-[1fr_320px]">
+        <section className="grid gap-8 lg:grid-cols-[1fr_320px]">
           <div className="space-y-8">
-            <section className="overflow-hidden rounded-3xl border border-border bg-white shadow-xl shadow-navy/5">
+            {/* Triage Lab Report Style Assessment */}
+            <section className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm">
               <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_280px]">
+                {/* Left Block: Assessment & Reasoning */}
                 <div className="p-8 md:p-10">
                   {triageData.fallbackUsed && (
-                    <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-bold text-amber-900">
-                      ⚠️ AI triage was unavailable for this request — showing a default recommendation, not a real assessment.
+                    <div className="mb-5 rounded-2xl border border-amber-100 bg-amber-50/50 p-4 text-xs font-semibold leading-relaxed text-amber-900 flex items-start gap-2.5">
+                      <svg className="h-4.5 w-4.5 text-amber-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                      <div>
+                        <strong>AI Triage Unavailable:</strong> Falling back to a safe general recommendation.
+                      </div>
                     </div>
                   )}
-                  <div className="flex items-center justify-between mb-4">
-                    <p className="text-xs font-bold uppercase text-teal">Triage assessment</p>
-                    <div className={`text-2xl font-bold ${confidenceColor}`}>
+
+                  <div className="flex items-center justify-between gap-4 mb-4">
+                    <p className="text-xs font-bold uppercase tracking-wider text-teal">Symptom Triage Assessment</p>
+                    <div className={`text-base font-extrabold tracking-tight ${confidenceColor}`}>
                       {confidence}% Confident
                     </div>
                   </div>
-                  <p className="mb-3 text-right text-[11px] font-bold uppercase text-text-muted">
-                    AI-estimated confidence based on symptom clarity
-                  </p>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+
+                  <div className="w-full bg-slate-100 rounded-full h-1.5 mb-6 overflow-hidden">
                     <div
-                      className="bg-teal h-2 rounded-full transition-all duration-500"
+                      className="bg-teal h-1.5 rounded-full transition-all duration-500"
                       style={{ width: `${confidence}%` }}
                     ></div>
                   </div>
-                  <h1 className="mt-3 text-4xl font-bold leading-tight text-navy">{specialty}</h1>
-                  <p className="mt-5 max-w-3xl text-base leading-8 text-text-muted">{reasoning}</p>
-                  <div className="mt-5 rounded-2xl border border-border bg-bg px-4 py-3 text-sm font-medium text-text-muted">
-                    AI triage does not diagnose illness. Confirm with a qualified clinician.
+
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Recommended Specialty</p>
+                  <h1 className="mt-1 text-3xl md:text-4xl font-extrabold text-navy leading-tight">{specialty}</h1>
+                  
+                  <div className="mt-6">
+                    <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Clinical Reasoning</p>
+                    <p className="mt-2 text-base leading-relaxed text-slate-500 font-medium">{reasoning}</p>
+                  </div>
+
+                  <div className="mt-6 flex gap-2.5 rounded-2xl border border-slate-100 bg-slate-50/50 p-4 text-sm font-medium text-slate-500">
+                    <svg className="h-4.5 w-4.5 text-slate-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p>
+                      Disclaimer: AI triage estimations are advisory only and do not replace physical clinical evaluation. Confirm with your doctor.
+                    </p>
                   </div>
                 </div>
 
-                <div className="border-t border-border bg-bg p-7 lg:border-l lg:border-t-0 min-h-[250px] flex flex-col justify-center">
-                  <p className="text-xs font-semibold uppercase text-text-muted">Route status</p>
-                  <span className={`mt-3 inline-flex rounded-full border px-3 py-1.5 text-xs font-semibold uppercase ${urgencyStyles[urgency] || urgencyStyles.medium}`}>
-                    Urgency: {urgency}
-                  </span>
+                {/* Right Block: Route Info & PDF Download */}
+                <div className="border-t border-slate-100 bg-slate-50/50 p-8 lg:border-l lg:border-t-0 flex flex-col justify-center">
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Urgency Status</p>
+                  <div className="mt-2">
+                    <span className={`inline-flex rounded-full border px-3 py-1.5 text-xs font-extrabold uppercase tracking-wide ${urgencyStyles[urgency] || urgencyStyles.medium}`}>
+                      Urgency: {urgency}
+                    </span>
+                  </div>
+
+                  <div className="mt-6 rounded-2xl bg-white border border-slate-100 p-4 shadow-sm">
+                    <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Triage Location</p>
+                    <p className="mt-0.5 text-lg font-extrabold text-navy">{city}</p>
+                  </div>
+
                   <button
                     type="button"
                     onClick={handleDownloadPDF}
-                    className="mt-5 w-full rounded-2xl border border-teal/20 bg-white px-4 py-3 text-sm font-semibold leading-5 text-teal shadow-sm hover:bg-teal/10 transition-all"
+                    className="mt-6 w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-teal/20 hover:border-teal/40 bg-white hover:bg-teal/5 px-4 py-3.5 text-xs font-bold uppercase tracking-wider text-teal shadow-sm transition-all cursor-pointer"
                   >
-                    Download Emergency Card
+                    <svg className="h-4 w-4 text-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Emergency Card (PDF)
                   </button>
-                  <div className="mt-5 rounded-2xl bg-white p-4">
-                    <p className="text-xs font-semibold uppercase text-text-muted">Selected city</p>
-                    <p className="mt-1 text-xl font-bold text-navy">{city}</p>
-                  </div>
                 </div>
               </div>
             </section>
 
-
+            {/* Doctors Recommendations List */}
             <section className="space-y-4">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                  <p className="text-xs font-semibold uppercase text-teal">Top matches</p>
-                  <h2 className="text-3xl font-bold text-navy">Recommended Doctors</h2>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-teal">Recommended Specialists</p>
+                  <h2 className="text-2xl font-extrabold text-navy">Verified Medical Officers</h2>
                 </div>
-                <p className="text-sm font-semibold text-text-muted">
-                  Showing {Math.min(results.length, 5)} results in <span className="text-navy">{city}</span>
+                <p className="text-xs font-semibold text-slate-400">
+                  Showing {Math.min(results.length, 5)} results in <span className="text-navy font-bold">{city}</span>
                 </p>
               </div>
 
               {fallbackUsed && (
-                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-medium leading-6 text-amber-900">
+                <div className="rounded-2xl border border-amber-100 bg-amber-50/50 p-4 text-xs font-medium leading-relaxed text-amber-900">
                   No exact {specialty} match was found in {city}, so MediRoute is showing top-rated local doctors for an initial consultation.
                 </div>
               )}
 
-              <div className="grid gap-5">
+              <div className="grid gap-4">
                 {results.length > 0 ? (
                   results.slice(0, 5).map((doc, index) => (
                     <DoctorCard key={doc.id} doc={doc} index={index} />
                   ))
                 ) : (
-                  <div className="rounded-3xl border border-border bg-white p-8 text-center text-text-muted shadow-sm">
-                    <div className="text-sm font-semibold text-navy">No doctors found in your city.</div>
+                  <div className="rounded-3xl border border-slate-100 bg-white p-8 text-center text-slate-400 shadow-sm">
+                    <p className="text-sm font-semibold text-navy">No matching medical practitioners found in this location.</p>
                   </div>
                 )}
               </div>
             </section>
           </div>
 
-          <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
-            <section className="rounded-3xl border border-border bg-white p-7 shadow-xl shadow-navy/5 min-h-[250px] flex flex-col">
-              <p className="text-xs font-semibold uppercase text-teal">Local emergency care</p>
-              <h2 className="mt-2 text-2xl font-bold text-navy">{city} contacts</h2>
-              <p className="mt-2 text-sm leading-6 text-text-muted">
-                If symptoms worsen, call 112 or contact one of these emergency providers.
+          {/* Right Sidebar: Local Emergency and Safety Info */}
+          <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+            <section className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-teal">Local Emergency Care</p>
+              <h2 className="mt-1 text-xl font-extrabold text-navy">{city} Contacts</h2>
+              <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                In case of critical clinical developments, contact these top-tier emergency providers directly.
               </p>
 
-              <div className="mt-6 space-y-4 flex-1">
+              <div className="mt-5 space-y-3">
                 {cityHospitals.length > 0 ? (
-                  cityHospitals.map((hosp) => (
-                    <div key={hosp.name} className="rounded-2xl border border-border bg-bg p-5 transition-all hover:shadow-md min-h-[100px] flex flex-col justify-center">
-                      <h3 className="text-sm font-semibold text-navy overflow-hidden text-ellipsis">{hosp.name}</h3>
-                      <p className="mt-1 text-xs leading-5 text-text-muted overflow-hidden text-ellipsis">{hosp.location}</p>
-                      <a
-                        href={`tel:${hosp.phone.replace(/-/g, '')}`}
-                        className="mt-3 inline-flex rounded-xl bg-white px-3 py-2 text-sm font-semibold text-teal shadow-sm hover:bg-teal/10 transition-all"
-                      >
-                        {hosp.phone}
-                      </a>
+                  cityHospitals.slice(0, 3).map((hosp) => (
+                    <div key={hosp.name} className="rounded-2xl border border-slate-50 bg-slate-50/30 p-4 hover:border-slate-100 transition-all flex flex-col justify-center">
+                      <h3 className="text-xs font-bold text-navy truncate">{hosp.name}</h3>
+                      <p className="text-[10px] text-slate-400 mt-1 truncate">{hosp.location}</p>
+                      
+                      <div className="mt-2.5">
+                        <a
+                          href={`tel:${hosp.phone.replace(/-/g, '')}`}
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-white border border-slate-200 px-3 py-1.5 text-xs font-semibold text-teal hover:border-teal/30 hover:bg-teal/5 transition-all shadow-sm"
+                        >
+                          <svg className="h-3 w-3 text-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                          </svg>
+                          {hosp.phone}
+                        </a>
+                      </div>
                     </div>
                   ))
                 ) : (
-                  <p className="text-sm text-text-muted">No emergency hospitals listed for this city.</p>
+                  <p className="text-xs text-slate-400">No emergency hospitals listed for this city.</p>
                 )}
               </div>
             </section>
 
-            <section className="rounded-3xl bg-navy p-7 text-white shadow-xl shadow-navy/15 min-h-[120px] flex flex-col justify-center">
-              <p className="text-xs font-semibold uppercase text-teal-light">Safety note</p>
-              <p className="mt-2 text-sm leading-6 text-white/80">
-                MediRoute is built for healthcare navigation only. It does not replace professional medical judgement.
+            <section className="rounded-3xl bg-navy p-6 text-white shadow-sm relative overflow-hidden">
+              <div className="absolute right-0 bottom-0 translate-x-4 translate-y-4 text-white/5 font-black text-6xl pointer-events-none">+</div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-teal-light">Clinical Navigation Guard</p>
+              <p className="mt-2 text-xs leading-relaxed text-slate-300">
+                MediRoute does not diagnose conditions. Please consult with a certified medical doctor for definitive advice.
               </p>
             </section>
           </aside>

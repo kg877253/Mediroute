@@ -107,27 +107,35 @@ function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-bg font-sans text-text flex flex-col">
+    <div className="min-h-screen bg-bg font-sans text-text flex flex-col relative overflow-hidden bg-grid-pattern">
+      {/* Decorative gradient blur background shapes */}
+      <div className="absolute top-[20%] left-[10%] w-[350px] h-[350px] rounded-full bg-teal/5 blur-3xl pointer-events-none -z-10" />
+      <div className="absolute bottom-[20%] right-[10%] w-[450px] h-[450px] rounded-full bg-navy/5 blur-3xl pointer-events-none -z-10" />
+
       <Header onOpenEmergency={openEmergencyMode} />
 
-      <RecentSearches history={history} onSelectHistory={handleSelectHistory} />
+      <main className="max-w-7xl mx-auto px-6 w-full flex-1 flex flex-col justify-center relative z-10">
+        <RecentSearches history={history} onSelectHistory={handleSelectHistory} />
 
-      <main className="max-w-7xl mx-auto px-6 py-6 lg:py-8 flex-1">
-        <section className="grid items-start gap-12 lg:grid-cols-[1fr_1fr]">
-          <Hero />
+        <div className="py-6 lg:py-10 flex-1 flex items-center min-h-[calc(100vh-180px)]">
+          <section className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] w-full">
+            <Hero />
 
-          <SearchForm 
-            symptomText={symptomText}
-            setSymptomText={setSymptomText}
-            city={city}
-            setCity={setCity}
-            loading={loading}
-            loadingPhase={loadingPhase}
-            error={error}
-            setError={setError}
-            onSubmit={handleSubmit}
-          />
-        </section>
+            <div className="w-full max-w-[500px] mx-auto lg:mr-0">
+              <SearchForm 
+                symptomText={symptomText}
+                setSymptomText={setSymptomText}
+                city={city}
+                setCity={setCity}
+                loading={loading}
+                loadingPhase={loadingPhase}
+                error={error}
+                setError={setError}
+                onSubmit={handleSubmit}
+              />
+            </div>
+          </section>
+        </div>
       </main>
 
       <Footer />

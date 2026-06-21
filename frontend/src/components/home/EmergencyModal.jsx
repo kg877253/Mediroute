@@ -30,75 +30,102 @@ export default function EmergencyModal({ emergencyCity, setEmergencyCity, onClos
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy/70 p-6 backdrop-blur-md">
-      <div className="relative flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl shadow-navy/30">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy/60 p-4 md:p-6 backdrop-blur-sm">
+      <div className="relative flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-3xl bg-white shadow-xl shadow-navy/20">
+        {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-6 top-6 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white text-2xl font-black text-red-600 shadow-lg hover:bg-red-50"
+          className="absolute right-6 top-6 z-20 flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 text-white hover:scale-105 active:scale-95 transition-all cursor-pointer"
           aria-label="Close emergency mode"
         >
-          X
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
 
-        <div className="bg-red-600 px-10 py-8 pr-24 text-white">
-          <p className="text-sm font-semibold uppercase text-white/80">Emergency mode</p>
-          <h3 className="mt-3 text-4xl font-bold">Call 112 for critical symptoms</h3>
-          <p className="mt-3 max-w-2xl text-lg leading-7 text-white/90">
-            If symptoms are life-threatening, call the national emergency number immediately or visit the nearest emergency facility.
-          </p>
-          <a
-            href="tel:112"
-            className="mt-6 inline-flex rounded-2xl bg-white px-8 py-4 text-lg font-semibold text-red-600 shadow-md hover:bg-red-50 hover:text-red-700 transition-all hover:shadow-lg"
-          >
-            Call 112 Now
-          </a>
+        {/* Urgent Call-out Header */}
+        <div className="bg-red-600 px-8 py-7 md:px-10 md:py-8 text-white relative overflow-hidden">
+          {/* Decorative background cross outline */}
+          <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 text-white/5 font-black text-[220px] pointer-events-none">+</div>
+          
+          <div className="relative z-10">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-white/80">Critical emergency support</p>
+            <h3 className="mt-1 text-2xl md:text-3xl font-extrabold tracking-tight">Call 112 for immediate assistance</h3>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-red-100">
+              If you or someone nearby is experiencing a life-threatening crisis, chest pain, or severe breathing distress, contact emergency services immediately.
+            </p>
+            <a
+              href="tel:112"
+              className="mt-4 inline-flex items-center gap-2.5 rounded-xl bg-white px-6 py-3 text-sm font-bold text-red-600 shadow-md hover:bg-red-50 hover:shadow-lg transition-all hover:-translate-y-0.5"
+            >
+              <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              Call National Helpline (112)
+            </a>
+          </div>
         </div>
 
-        <div className="grid min-h-0 flex-1 gap-0 lg:grid-cols-[280px_1fr]">
-          <div className="border-b border-border bg-bg p-6 lg:border-b-0 lg:border-r">
-            <p className="mb-4 text-sm font-semibold uppercase text-text-muted">Choose city</p>
-            <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
+        {/* Modal Content Panels */}
+        <div className="grid min-h-0 flex-1 gap-0 grid-cols-1 lg:grid-cols-[280px_1fr]">
+          {/* Left panel: Cities */}
+          <div className="border-b border-slate-100 bg-slate-50/50 p-6 lg:border-b-0 lg:border-r lg:border-slate-100">
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">Filter By City</p>
+            <div className="grid grid-cols-2 gap-2 lg:grid-cols-1">
               {cities.map((cityName) => (
                 <button
                   key={cityName}
                   type="button"
                   onClick={() => setEmergencyCity(cityName)}
-                  className={`rounded-xl px-5 py-4 text-left text-base font-semibold transition-all min-h-[60px] flex items-center ${
+                  className={`rounded-xl px-4 py-3 text-left text-sm font-semibold transition-all flex items-center gap-2.5 cursor-pointer border ${
                     emergencyCity === cityName
-                      ? 'bg-navy text-white shadow-md'
-                      : 'bg-white text-navy hover:bg-teal/10 hover:text-teal hover:shadow-md'
+                      ? 'bg-navy border-navy text-white shadow-md'
+                      : 'bg-white border-slate-100 text-navy hover:bg-teal/5 hover:text-teal hover:border-teal/20'
                   }`}
                 >
+                  <span className={`h-2 w-2 rounded-full ${emergencyCity === cityName ? 'bg-teal-light' : 'bg-slate-300'}`}></span>
                   {cityName}
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="min-h-0 overflow-y-auto p-8 md:p-10">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          {/* Right panel: Hospitals list */}
+          <div className="min-h-0 overflow-y-auto p-6 md:p-8 bg-white">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between border-b border-slate-100 pb-4">
               <div>
-                <p className="text-sm font-semibold uppercase text-teal">Emergency hospitals</p>
-                <h4 className="text-3xl font-bold text-navy">{emergencyCity}</h4>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-teal">Emergency medical providers</p>
+                <h4 className="text-2xl font-extrabold text-navy">{emergencyCity}</h4>
               </div>
-              <p className="text-base font-medium text-text-muted">Verified emergency contacts for demo use</p>
+              <p className="text-xs font-semibold text-slate-400">Demo contacts verified for immediate reference</p>
             </div>
 
-            <div className="mt-8 grid gap-6">
+            <div className="mt-6 grid gap-4">
               {emergencyHospitals[emergencyCity].map((hosp, index) => (
-                <div key={hosp.name} className="rounded-2xl border border-border bg-bg p-6 min-h-[120px] flex items-center">
-                  <div className="flex gap-5 w-full">
-                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-600 text-base font-bold text-white">
-                      {index + 1}
-                    </span>
-                    <div className="flex-1">
-                      <h5 className="text-xl font-semibold text-navy overflow-hidden text-ellipsis">{hosp.name}</h5>
-                      <p className="mt-2 text-base text-text-muted overflow-hidden text-ellipsis">{hosp.location}</p>
+                <div key={hosp.name} className="rounded-2xl border border-slate-100 bg-slate-50/30 p-5 hover:border-slate-200 transition-all flex items-start gap-4">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600 text-sm font-extrabold border border-red-100">
+                    {index + 1}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                      <div>
+                        <h5 className="text-base font-bold text-navy truncate">{hosp.name}</h5>
+                        <p className="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
+                          <svg className="h-3.5 w-3.5 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          {hosp.location}
+                        </p>
+                      </div>
                       <a
                         href={`tel:${hosp.phone.replace(/-/g, '')}`}
-                        className="mt-4 inline-flex rounded-xl bg-white px-5 py-3 text-base font-semibold text-teal shadow-sm hover:text-teal-light transition-all hover:shadow-md"
+                        className="inline-flex items-center gap-2 rounded-xl bg-white border border-slate-200 px-4 py-2.5 text-xs font-bold text-teal hover:border-teal/30 hover:bg-teal/5 shadow-sm transition-all"
                       >
+                        <svg className="h-3.5 w-3.5 text-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
                         {hosp.phone}
                       </a>
                     </div>
