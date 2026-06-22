@@ -1,43 +1,42 @@
-# MediRoute Frontend
+<div align="center">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E" alt="Vite" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+</div>
 
-React + Vite frontend for the MediRoute hackathon MVP.
+# MediRoute Client Interface
 
-## What It Does
+This package holds the graphical frontend interface constructed predominantly via **React**, styled beautifully with **Tailwind CSS**, and bundled seamlessly by **Vite**.
 
-- Lets a user describe symptoms in plain English.
-- Lets the user choose one supported city: Delhi, Mumbai, Jaipur, Goa, or Bangalore.
-- Sends symptoms to the backend triage endpoint.
-- Shows recommended specialty, urgency, reasoning, and matching doctors.
-- Shows high-urgency emergency guidance with a `tel:112` action.
-- Supports an emergency mode modal and downloadable PDF emergency card.
+## 🎨 User Experience Directives
+The presentation layer is intended for high cognitive clarity so that users managing clinical distress are logically driven towards their resolution loop in three distinct steps: Symptom definition, specialized rendering, and local doctor matching. 
 
-MediRoute is a healthcare navigation tool, not a diagnosis tool. The UI should never claim to diagnose a disease.
+## 🛠 Configuration
 
-## Setup
+Before launching, assure that local environment variables are properly pointing towards an active instance of the MediRoute backend APIs.
 
 ```bash
-npm install
+# Clone example 
 cp .env.example .env
-npm run dev
 ```
+Inside `.env`, verify: `<VITE_API_URL=http://localhost:5000>`
 
-The frontend expects:
+## 🚀 Execution
 
-```env
-VITE_API_URL=http://localhost:5000
-```
+1. Build system dependencies
+    ```bash
+    npm install
+    ```
+2. Spawn local execution server
+    ```bash
+    npm run dev
+    ```
 
-## Scripts
+3. To format output for deployment environments:
+   ```bash
+   npm run build
+   ```
 
-```bash
-npm run dev
-npm run build
-npm run lint
-npm run preview
-```
+## 🌐 Deployed Operations
 
-## Deployment
-
-Deploy target: Vercel.
-
-Set `VITE_API_URL` to the deployed Render backend URL before production deployment.
+When migrating this repository to continuous deployment services such as Vercel, ensure you override the local local `VITE_API_URL` to route requests dynamically to the externally secured `Render` backend production server URL.

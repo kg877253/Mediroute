@@ -1,183 +1,93 @@
-# MediRoute
+<div align="center">
+  <h1>🏥 MediRoute</h1>
+  <p><strong>Right Doctor · Right Cost · Right Now</strong></p>
+  
+  <p>An AI-powered healthcare navigation platform developed for <strong>Bharat Academix CodeQuest 2026</strong>.</p>
 
-MediRoute is an AI-powered healthcare navigation MVP built for Bharat Academix CodeQuest 2026, Round 2 Prototype Development.
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E" alt="Vite" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node" />
+  <img src="https://img.shields.io/badge/Google_Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini AI" />
+  
+</div>
 
-The app helps a user enter symptoms and a city, then recommends the right type of doctor and shows verified doctor options with transparent consultation fees. It is navigation support, not medical diagnosis.
+---
 
-## Current MVP Scope
+## 🎯 The Problem
 
-- AI symptom triage using Gemini `gemini-2.5-flash`
-- Specialty recommendation from a strict whitelist
-- Urgency classification: `low`, `medium`, or `high`
-- Static JSON doctor search by city and specialty
-- Doctor cards with fee range, rating, and NMC-verified badge
-- Google Maps search links for directions
-- High-urgency emergency banner with `tel:112`
-- Emergency mode modal with city hospital contacts
-- Downloadable emergency PDF card
+Finding the right specialist while experiencing severe symptoms can be stressful, inefficient, and fraught with jargon. Too often, patients seek the wrong clinical track, leading to delayed treatments, frustration, and higher healthcare expenditures.
 
-## Out Of Scope For This MVP
+## 💡 Our Solution: MediRoute
 
-- WhatsApp/Twilio bot
-- Authentication
-- Multi-language UI
-- Vector database
-- React Native app
-- Payments or bookings
+MediRoute translates **plain language symptoms** into a verified actionable **Care Route**. In 60 seconds, utilizing Google Gemini AI, it automatically triages severity, routes to correct specialties, and recommends NMC-verified nearby providers equipped with clear, upfront pricing parameters. 
 
-These can be described as roadmap items, not current prototype features.
+**Note on Patient Safety:** *MediRoute operates solely as a navigation tool, not a diagnostic medical service. Emergency scenarios heavily trigger high-urgency notifications directing intervention to the National Help Line (112).*
 
-## Tech Stack
+---
 
-- Frontend: React, Vite, Tailwind CSS
-- Backend: Node.js, Express
-- AI: Gemini API, model `gemini-2.5-flash`
-- Data: static JSON at `backend/data/doctors.json`
-- Deployment target: Render for backend, Vercel for frontend
+## ✨ Features (MVP Round 2)
 
-## How It Works
+*   **Intelligent AI Triage:** Employs `gemini-2.5-flash` to extract semantic medical need from casual sentence structures.
+*   **Safety-First Critical Assessment:** Sorts logic severity immediately; outputs prompt 112 routing modal over low-impact issues.
+*   **Geolocated Provider Database:** Highly responsive JSON indexing across 5 primary Indian cities mapping directly to major specialties.
+*   **Clean Actionable UI:** Modern, lightweight frontend focused heavily on removing cognitive interface clutter.
+
+---
+
+## 🧬 Project Architecture 
 
 ```text
-Symptom text -> Gemini triage -> specialty whitelist -> JSON doctor filter -> sorted doctor cards
+User Input -> Gemini AI Triage Engine -> Severity & Specialty Sorting -> Deterministic Doctor Filter Search -> Recommendation Action Cards
 ```
 
-The AI only decides the recommended specialty and urgency. The doctor search itself is deterministic: it filters the static doctor dataset by city and specialty, then sorts by rating.
+MediRoute operates with a clear separation of concerns.
+*   **`frontend/`**: The presentation and UI flow (React + Vite). [More Info](frontend/README.md)
+*   **`backend/`**: The central routing logic integrating LLMs and serving Doctor endpoints (Node.JS + Express). [More Info](backend/README.md)
 
-## Supported Cities
+---
 
-- Delhi
-- Mumbai
-- Jaipur
-- Goa
-- Bangalore
+## 🏁 Quick Start Setup
 
-## Supported Specialties
+To test out MediRoute locally on your machine, you must boot both the frontend and backend microservices concurrently.
 
-The app only uses these exact specialty strings:
+### 1️⃣ Launching the Backend Server
 
-- General Physician
-- Cardiologist
-- Dermatologist
-- Orthopedic
-- Pediatrician
-- ENT Specialist
-- Gynecologist
-- Dentist
-
-## Quick Start
-
-Terminal 1:
-
+Open Terminal #1:
 ```bash
 cd backend
 npm install
 cp .env.example .env
-npm run dev
 ```
+*Be sure to open `backend/.env` and inject your active Google Gemini API authentication key.*
+```bash
+npm start
+```
+*(Runs locally on port 5000)*
 
-Terminal 2:
+### 2️⃣ Launching the Frontend Application
 
+Open Terminal #2:
 ```bash
 cd frontend
 npm install
 cp .env.example .env
-npm run dev
 ```
-
-Backend runs on `http://localhost:5000`.
-
-Frontend runs on the Vite URL shown in the terminal, usually `http://localhost:5173`.
-
-## Environment Setup
-
-Add your Gemini API key to `backend/.env`:
-
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-PORT=5000
-```
-
-Set the frontend API URL in `frontend/.env`:
-
-```env
-VITE_API_URL=http://localhost:5000
-```
-
-## Local Setup Details
-
-Backend:
-
+*(Requires `VITE_API_URL=http://localhost:5000` to be established within the created `.env`)*
 ```bash
-cd backend
-npm install
 npm run dev
 ```
 
-Frontend:
+The React interface should securely boot and provide you the local hot-deployment URI (usually `localhost:5173`).
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+---
 
-## Sample Demo Symptoms
+## 📈 Scalability Roadmap
 
-- `I have chest pain and difficulty breathing` - should show high urgency guidance.
-- `I have an itchy skin rash on my arm` - should route toward Dermatologist.
-- `My tooth hurts badly when I eat` - should route toward Dentist.
-- `My child has fever and cough` - should route toward Pediatrician.
-- `I have ear pain and blocked nose` - should route toward ENT Specialist.
+Moving forward beyond CodeQuest 2026, the application structure intends to adopt:
+*   Full persistent vector database incorporation for hospital matching.
+*   Regional Multi-Language transcription integration.
+*   Direct clinic live appointment scheduling systems via API bridges.
 
-## API Endpoints
-
-Backend default URL:
-
-```text
-http://localhost:5000
-```
-
-Health check:
-
-```http
-GET /api/health
-```
-
-Symptom triage:
-
-```http
-POST /api/triage
-Content-Type: application/json
-
-{
-  "symptomText": "I have chest pain and difficulty breathing"
-}
-```
-
-Doctor search:
-
-```http
-POST /api/search
-Content-Type: application/json
-
-{
-  "specialty": "Cardiologist",
-  "city": "Delhi"
-}
-```
-
-## Demo Flow For Judges
-
-1. Enter a symptom such as `I have chest pain and breathing difficulty`.
-2. Select a city.
-3. Submit the form.
-4. Show the recommended specialty and urgency.
-5. Show the doctor recommendation cards.
-6. Open the high-urgency `112` action or emergency mode.
-7. Download the emergency PDF card.
-
-## Safety Positioning
-
-MediRoute does not diagnose illness. It only routes users toward an appropriate medical specialty and nearby care options.
-
-For emergencies, users should call `112` or visit the nearest emergency facility.
+## ⚖️ Disclaimer
+*All demonstrated providers and pricing within the current dataset represent static JSON prototyping for assessment. In real-world integration, this connects directly via clinical API feeds.*
