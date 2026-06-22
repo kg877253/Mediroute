@@ -6,59 +6,54 @@ export default function Hero() {
   ]
 
   return (
-    <div className="flex flex-col gap-6 pt-2 lg:pt-4 relative">
-      {/* Decorative Blob */}
-      <div className="absolute -top-20 -left-20 h-64 w-64 rounded-full bg-teal/5 blur-3xl -z-10 animate-pulse-subtle pointer-events-none"></div>
-
-      <div>
-        <h2 className="heading-display text-[2.25rem] leading-[1.12] sm:text-[2.75rem] bg-gradient-to-br from-navy to-navy-light bg-clip-text text-transparent">
-          Find the right specialist
-          <br />
-          <span className="bg-gradient-to-r from-teal to-teal-light bg-clip-text text-transparent">in under 60 seconds.</span>
+    <div className="flex flex-col gap-10 pt-10 lg:pt-16 relative">
+      <div className="max-w-3xl">
+        <h2 className="heading-display text-5xl md:text-[5rem] lg:text-[5.5rem]">
+          Fewer clicks.<br />
+          <span className="text-teal">More care.</span>
         </h2>
 
-        <p className="mt-5 max-w-md text-base leading-relaxed text-slate-500 font-medium">
-          MediRoute transforms your symptoms into a verified care route — identifying the correct clinical specialty, urgency rating, and local doctors.
+        <p className="mt-8 max-w-xl text-lg md:text-xl leading-relaxed text-slate-600">
+          Admit more patients, reduce staff burden, and find the right specialist with an AI-native system built for your health.
         </p>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 sm:gap-4 mt-2">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl">
         {[
-          { value: '8', label: 'Specialties', accent: 'border-t-teal text-teal' },
-          { value: '5', label: 'Cities', accent: 'border-t-navy text-navy' },
-          { value: '24/7', label: 'Emergency', accent: 'border-t-red-500 text-red-600', valueClass: 'text-red-600' },
+          { value: '8', label: 'Specialties' },
+          { value: '5', label: 'Cities' },
+          { value: '24/7', label: 'Emergency' },
         ].map((stat) => (
-          <div key={stat.label} className={`stat-pill border-t-[4px] ${stat.accent}`}>
-            <span className={`stat-pill__value ${stat.valueClass || ''}`}>{stat.value}</span>
+          <div key={stat.label} className="stat-pill border-none bg-transparent !px-0 !shadow-none">
+            <span className="stat-pill__value">{stat.value}</span>
             <span className="stat-pill__label">{stat.label}</span>
           </div>
         ))}
       </div>
 
-      <div className="card-clinical p-6 mt-2 relative overflow-hidden group">
-        <div className="absolute right-0 top-0 h-full w-1 bg-gradient-to-b from-teal to-teal-dark opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-        <p className="label-section mb-4 text-navy font-extrabold tracking-wider">Your Care Route Journey</p>
-        <div className="space-y-3">
+      <div className="card-elevated p-8 mt-6 max-w-3xl">
+        <p className="label-section mb-6">Your Care Route Journey</p>
+        <div className="space-y-4">
           {steps.map((step, i) => (
-            <div key={step.title} className="flex items-start gap-4 rounded-xl bg-slate-50/80 px-4 py-3 transition-colors hover:bg-slate-100/80 border border-transparent hover:border-slate-200">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-navy to-navy-light text-xs font-black text-white shadow-md">
+            <div key={step.title} className="flex items-start gap-5">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-navy text-sm font-bold text-white">
                 {i + 1}
               </span>
-              <div className="min-w-0 pt-0.5">
-                <p className="text-[15px] font-bold text-navy">{step.title}</p>
-                <p className="text-xs text-slate-500 mt-0.5 font-medium">{step.desc}</p>
+              <div className="min-w-0 pt-1">
+                <p className="text-base font-semibold text-navy">{step.title}</p>
+                <p className="text-sm text-slate-500 mt-1">{step.desc}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="flex gap-3 rounded-xl border border-amber-200/60 bg-gradient-to-r from-amber-50 to-orange-50/30 px-5 py-4 text-[13px] leading-relaxed text-amber-900 shadow-sm mt-2">
-        <svg className="mt-0.5 h-5 w-5 shrink-0 text-amber-500 animate-pulse-subtle" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+      <div className="max-w-3xl flex gap-4 rounded-3xl bg-amber-50 p-6 text-sm leading-relaxed text-amber-900 mt-4">
+        <svg className="mt-0.5 h-6 w-6 shrink-0 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
         <p>
-          <strong className="font-extrabold text-amber-950">Navigation support only.</strong> MediRoute never provides definitive clinical diagnoses or treats emergency conditions.
+          <strong className="font-bold text-amber-950">Navigation support only.</strong> MediRoute never provides definitive clinical diagnoses or treats emergency conditions.
         </p>
       </div>
     </div>
