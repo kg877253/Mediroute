@@ -44,10 +44,10 @@ export default function EmergencyModal({ emergencyCity, setEmergencyCity, onClos
         </button>
 
         <div className="shrink-0 bg-red-600 px-6 py-6 pr-14 text-white md:px-8 md:py-7">
-          <p className="label-section !text-red-100">Critical emergency support</p>
-          <h3 className="mt-1 text-xl font-extrabold leading-snug md:text-2xl">Call 112 for immediate assistance</h3>
+          <p className="label-section !text-red-100">Emergency Medical Support</p>
+          <h3 className="mt-1 text-xl font-extrabold leading-snug md:text-2xl">For a Medical Emergency, Call 112</h3>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-red-100">
-            If you or someone nearby is experiencing a life-threatening crisis, chest pain, or severe breathing distress, contact emergency services immediately.
+            If you are experiencing a life-threatening situation, such as severe chest pain, difficulty breathing, or major injury, please call your local emergency number immediately.
           </p>
           <a
             href="tel:112"
@@ -56,13 +56,13 @@ export default function EmergencyModal({ emergencyCity, setEmergencyCity, onClos
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
-            Call National Helpline (112)
+            Call National Emergency Helpline (112)
           </a>
         </div>
 
         <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[220px_1fr]">
           <div className="shrink-0 border-b border-slate-100 bg-slate-50 p-5 lg:border-b-0 lg:border-r">
-            <p className="label-section mb-3">Filter By City</p>
+            <p className="label-section mb-3">Select Your City</p>
             <div className="grid grid-cols-2 gap-2 lg:grid-cols-1">
               {cities.map((cityName) => (
                 <button
@@ -83,9 +83,9 @@ export default function EmergencyModal({ emergencyCity, setEmergencyCity, onClos
 
           <div className="min-h-0 overflow-y-auto p-5 md:p-6">
             <div className="border-b border-slate-100 pb-4">
-              <p className="label-section">Emergency medical providers</p>
+              <p className="label-section">Emergency Centers and Hospitals</p>
               <h4 className="mt-0.5 text-xl font-extrabold text-navy">{emergencyCity}</h4>
-              <p className="mt-1 text-xs text-slate-400">Demo contacts verified for immediate reference</p>
+              <p className="mt-1 text-xs text-slate-400">The following are major hospitals with 24/7 emergency services.</p>
             </div>
 
             <div className="mt-4 space-y-3">
