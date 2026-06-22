@@ -8,11 +8,6 @@ export default function Hero() {
   return (
     <div className="flex flex-col gap-6 pt-2 lg:pt-4">
       <div>
-        <div className="meta-chip mb-4 w-fit">
-          <span className="h-1.5 w-1.5 rounded-full bg-teal" />
-          Powered by Gemini 2.5 Flash
-        </div>
-
         <h2 className="heading-display text-[2rem] leading-[1.12] sm:text-[2.35rem]">
           Find the right specialist
           <br />

@@ -96,7 +96,7 @@ a:hover {
 .heading-display {
   font-family: var(--font-display);
   font-weight: 800;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
   color: var(--color-navy);
 }
 
@@ -225,14 +225,22 @@ a:hover {
 /* ── Inputs ── */
 .input-field {
   width: 100%;
+  box-sizing: border-box;
   border-radius: 0.75rem;
   border: 1px solid rgb(226 232 240);
   background: rgb(248 250 252 / 0.8);
-  padding: 0.875rem 1rem;
+  padding: 0.875rem 1.125rem;
   font-size: 0.875rem;
-  line-height: 1.5;
+  line-height: 1.6;
   color: var(--color-navy);
   outline: none;
+  text-indent: 0;
+}
+
+textarea.input-field {
+  min-height: 7rem;
+  overflow-y: auto;
+  resize: vertical;
 }
 
 .input-field::placeholder { color: #94a3b8; }

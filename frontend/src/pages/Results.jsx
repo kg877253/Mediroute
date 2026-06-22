@@ -151,14 +151,14 @@ function Results() {
     <div className="page-shell flex min-h-screen flex-col font-sans text-text">
       <header className="site-header site-header--dark">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
-          <Link to="/" className="group flex items-center gap-3">
+          <Link to="/" className="group flex min-w-0 shrink-0 items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal text-white transition-transform group-hover:scale-[1.03]">
               <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
               </svg>
             </div>
-            <div>
-              <p className="heading-display text-lg leading-none text-white">
+            <div className="min-w-0 shrink">
+              <p className="text-lg font-extrabold leading-none text-white">
                 Medi<span className="text-teal-light">Route</span>
               </p>
               <p className="label-section mt-0.5 !text-[10px] !text-slate-400">
@@ -320,9 +320,9 @@ function Results() {
               <div className="mt-4 space-y-2.5">
                 {cityHospitals.length > 0 ? (
                   cityHospitals.slice(0, 3).map((hosp) => (
-                    <div key={hosp.name} className="flex flex-col justify-center rounded-xl border border-slate-100 bg-slate-50/50 p-3.5 transition-colors hover:border-slate-200 hover:bg-white">
-                      <h3 className="truncate text-xs font-bold text-navy">{hosp.name}</h3>
-                      <p className="mt-0.5 truncate text-[10px] text-slate-400">{hosp.location}</p>
+                    <div key={hosp.name} className="rounded-xl border border-slate-100 bg-slate-50/50 p-3.5 transition-colors hover:border-slate-200 hover:bg-white">
+                      <h3 className="break-words text-xs font-bold leading-snug text-navy">{hosp.name}</h3>
+                      <p className="mt-0.5 break-words text-[10px] leading-relaxed text-slate-400">{hosp.location}</p>
                       
                       <div className="mt-2">
                         <a

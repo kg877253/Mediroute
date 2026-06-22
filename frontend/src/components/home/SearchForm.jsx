@@ -42,10 +42,10 @@ export default function SearchForm({
   }
 
   return (
-    <div className="card-elevated overflow-hidden lg:sticky lg:top-20">
-      <div className="border-b border-slate-100 bg-slate-50/50 px-6 py-5">
+    <div className="card-elevated rounded-2xl lg:sticky lg:top-20">
+      <div className="rounded-t-2xl border-b border-slate-100 bg-slate-50/50 px-6 py-5">
         <p className="label-section !text-teal">Start a care route</p>
-        <h3 className="heading-display mt-1 text-xl">Describe Your Symptoms</h3>
+        <h3 className="mt-1 text-xl font-extrabold leading-snug text-navy">Describe Your Symptoms</h3>
         <p className="mt-1 text-xs text-slate-500">
           AI matches your symptoms to the right specialist
         </p>
