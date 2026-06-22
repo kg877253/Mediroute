@@ -89,25 +89,10 @@ function Home() {
       <Header onOpenEmergency={openEmergencyMode} />
 
       <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-6">
+        <RecentSearches history={history} onSelectHistory={handleSelectHistory} />
+
         <div className="grid w-full flex-1 items-start gap-8 pt-1 lg:grid-cols-[1fr_400px] lg:gap-10">
-          <div>
-            <Hero />
-            <div className="stats">
-              <div className="stat">
-                <div className="num">8</div>
-                <div className="lbl">Specialties</div>
-              </div>
-              <div className="stat">
-                <div className="num">5</div>
-                <div className="lbl">Cities</div>
-              </div>
-              <div className="stat">
-                <div className="num live">24/7</div>
-                <div className="lbl">Emergency</div>
-              </div>
-            </div>
-            <RecentSearches history={history} onSelectHistory={handleSelectHistory} />
-          </div>
+          <Hero />
           <SearchForm
             symptomText={symptomText}
             setSymptomText={setSymptomText}
