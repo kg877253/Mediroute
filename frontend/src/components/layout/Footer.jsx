@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-100 bg-white/80 py-6 px-6 mt-auto">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-medium text-slate-500">
+    <footer className="mt-auto border-t border-slate-100 bg-white px-6 py-5">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 text-xs text-slate-500 md:flex-row">
         <p className="text-center md:text-left">
           © {new Date().getFullYear()} MediRoute MVP — Bharat Academix CodeQuest 2026.
         </p>

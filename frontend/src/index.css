@@ -92,3 +92,19 @@ a:hover {
     linear-gradient(to right, rgba(30, 39, 97, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(30, 39, 97, 0.03) 1px, transparent 1px);
 }
+
+/* Shared clinical UI primitives */
+.label-section {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.card-clinical {
+  border-radius: 1rem;
+  border: 1px solid rgb(226 232 240 / 0.9);
+  background-color: #fff;
+  box-shadow: 0 1px 2px 0 rgb(30 39 97 / 0.04);
+}

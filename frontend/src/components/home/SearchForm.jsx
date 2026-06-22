@@ -42,12 +42,12 @@ export default function SearchForm({
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <div className="border-l-4 border-teal bg-white px-6 py-5">
-        <p className="text-teal text-xs font-bold uppercase tracking-wider">
+    <div className="card-clinical overflow-hidden">
+      <div className="border-b border-slate-100 border-l-4 border-l-teal bg-white px-6 py-5">
+        <p className="text-xs font-bold uppercase tracking-wider text-teal">
           Start a care route
         </p>
-        <h3 className="mt-1 text-xl font-extrabold text-navy leading-tight">
+        <h3 className="mt-1 text-xl font-extrabold leading-tight text-navy">
           Describe Your Symptoms
         </h3>
         <p className="mt-1 text-xs text-slate-500">
@@ -55,19 +55,19 @@ export default function SearchForm({
         </p>
       </div>
 
-      <form onSubmit={onSubmit} style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <form onSubmit={onSubmit} className="flex flex-col gap-5 p-6">
         <div>
-          <div className="flex justify-between items-center mb-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+          <div className="mb-2 flex items-center justify-between">
+            <label className="label-section">
               What symptoms are you experiencing?
             </label>
             <button
               type="button"
               onClick={startVoiceInput}
-              className={`text-xs font-bold flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all border ${
+              className={`flex items-center gap-1.5 rounded-lg border px-3 py-1 text-xs font-bold transition-all ${
                 isListening
-                  ? 'bg-red-500 text-white border-red-500 animate-pulse'
-                  : 'bg-teal/5 text-teal border-teal/10 hover:bg-teal/10'
+                  ? 'animate-pulse border-red-500 bg-red-500 text-white'
+                  : 'border-slate-200 bg-white text-slate-600 hover:border-teal/30 hover:text-teal'
               }`}
             >
               <span>{isListening ? 'Listening...' : 'Speak Symptoms'}</span>
@@ -79,12 +79,12 @@ export default function SearchForm({
             placeholder="e.g. 'I have a dry cough, mild fever, and shortness of breath starting yesterday'..."
             rows={4}
             disabled={loading}
-            className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-navy placeholder-slate-400 outline-none focus:border-teal focus:bg-white transition-all leading-relaxed"
+            className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50/80 px-4 py-3.5 text-sm leading-relaxed text-navy placeholder-slate-400 outline-none transition-all focus:border-teal focus:bg-white focus:ring-2 focus:ring-teal/10"
           />
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">
+          <label className="label-section mb-2 block">
             Select City
           </label>
           <div className="relative">
@@ -92,7 +92,7 @@ export default function SearchForm({
               value={city}
               onChange={(e) => setCity(e.target.value)}
               disabled={loading}
-              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-navy outline-none appearance-none cursor-pointer"
+              className="w-full cursor-pointer appearance-none rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-navy outline-none transition-all focus:border-teal focus:ring-2 focus:ring-teal/10"
             >
               {cities.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
@@ -105,7 +105,7 @@ export default function SearchForm({
         </div>
 
         <div>
-          <p className="mb-1.5 text-xs font-bold uppercase tracking-wider text-slate-500">Quick Symptoms</p>
+          <p className="label-section mb-2">Quick Symptoms</p>
           <div className="flex flex-wrap gap-2">
             {quickSymptoms.map((s) => (
               <button
@@ -113,9 +113,9 @@ export default function SearchForm({
                 type="button"
                 onClick={() => setSymptomText(s.text)}
                 disabled={loading}
-                className="flex items-center gap-1.5 rounded-lg border border-slate-100 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-navy hover:border-teal/40 hover:bg-teal/5 hover:text-teal transition-all cursor-pointer"
+                className="flex cursor-pointer items-center gap-1.5 rounded-xl border border-slate-100 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-navy transition-all hover:border-slate-200 hover:bg-white disabled:opacity-50"
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-teal shrink-0" />
+                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-slate-300" />
                 {s.label}
               </button>
             ))}
@@ -123,8 +123,8 @@ export default function SearchForm({
         </div>
 
         {error && (
-          <div className="rounded-xl border border-red-100 bg-red-50 p-3 flex items-start gap-2.5">
-            <svg className="h-4 w-4 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <div className="flex items-start gap-2.5 rounded-xl border border-red-100 bg-red-50 p-3">
+            <svg className="mt-0.5 h-4 w-4 shrink-0 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
             <div>
@@ -136,22 +136,21 @@ export default function SearchForm({
         )}
 
         {loading ? (
-          <div className="rounded-xl border border-slate-100 bg-slate-50 p-4 flex flex-col items-center gap-2.5">
-            <div className="h-8 w-8 rounded-full border-4 border-teal/10 border-t-teal animate-spin" />
+          <div className="flex flex-col items-center gap-2.5 rounded-xl border border-slate-100 bg-slate-50 p-5">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-teal" />
             <p className="text-sm font-bold text-navy">{loadingPhase}</p>
-            <p className="text-[10px] text-center text-amber-600 font-semibold max-w-xs animate-pulse">
+            <p className="max-w-xs animate-pulse text-center text-[10px] font-semibold text-amber-600">
               Note: Backend hosted on a free Render instance can take up to 50 seconds to initialize during cold starts.
             </p>
-            <div className="w-36 bg-slate-200 rounded-full h-1 overflow-hidden">
-              <div className="bg-teal h-1 rounded-full transition-all duration-500"
+            <div className="h-1 w-36 overflow-hidden rounded-full bg-slate-200">
+              <div className="h-1 rounded-full bg-teal transition-all duration-500"
                 style={{ width: loadingPhase.includes('Analyzing') ? '45%' : '90%' }} />
             </div>
           </div>
         ) : (
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold text-white cursor-pointer transition-all hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0"
-            style={{ background: 'linear-gradient(135deg, #028090, #015D69)', boxShadow: '0 4px 14px rgba(2,128,144,0.35)' }}
+            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-teal py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-teal-dark hover:shadow-md active:translate-y-px"
           >
             Find My Doctor
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>

@@ -85,16 +85,13 @@ function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-bg font-sans text-text flex flex-col relative overflow-x-hidden bg-grid-pattern">
-      <div className="absolute top-[15%] left-[5%] w-[300px] h-[300px] rounded-full bg-teal/5 blur-3xl pointer-events-none -z-10" />
-      <div className="absolute bottom-[15%] right-[5%] w-[400px] h-[400px] rounded-full bg-navy/5 blur-3xl pointer-events-none -z-10" />
-
+    <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-bg bg-grid-pattern font-sans text-text">
       <Header onOpenEmergency={openEmergencyMode} />
 
-      <main className="w-full max-w-7xl mx-auto px-8 flex-1 flex flex-col py-6 relative z-10">
+      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-6">
         <RecentSearches history={history} onSelectHistory={handleSelectHistory} />
 
-        <div className="flex-1 grid items-start gap-8 lg:grid-cols-2 w-full pt-2">
+        <div className="grid w-full flex-1 items-start gap-8 pt-1 lg:grid-cols-2 lg:gap-10">
           <Hero />
           <SearchForm
             symptomText={symptomText}
