@@ -270,7 +270,7 @@ function Results() {
                   <h2 className="heading-display mt-2 text-3xl">Verified Medical Officers</h2>
                 </div>
                 <p className="text-sm font-medium text-slate-500 pb-1">
-                  Showing {Math.min(results.length, 5)} results in <span className="font-bold text-navy">{city}</span>
+                  Showing {Math.min(results.length, 8)} results in <span className="font-bold text-navy">{city}</span>
                 </p>
               </div>
 
@@ -282,7 +282,7 @@ function Results() {
 
               <div className="grid gap-4">
                 {results.length > 0 ? (
-                  results.slice(0, 5).map((doc, index) => (
+                  results.slice(0, 8).map((doc, index) => (
                     <DoctorCard key={doc.id} doc={doc} index={index} />
                   ))
                 ) : (

@@ -42,8 +42,9 @@ exports.searchDoctors = (req, res) => {
     // 3. Sort results by rating descending
     filtered.sort((a, b) => b.rating - a.rating);
 
-    // 4. Take the top 5 results
-    const results = filtered.slice(0, 5);
+    // 4. Take the top 8 results so users can compare more options
+    // while keeping the MVP results page easy to scan during a demo.
+    const results = filtered.slice(0, 8);
 
     return res.json({
       success: true,
