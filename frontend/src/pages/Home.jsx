@@ -85,13 +85,13 @@ function Home() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-bg bg-grid-pattern font-sans text-text">
+    <div className="relative flex min-h-screen flex-col overflow-x-hidden page-shell font-sans text-text">
       <Header onOpenEmergency={openEmergencyMode} />
 
       <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-6">
         <RecentSearches history={history} onSelectHistory={handleSelectHistory} />
 
-        <div className="grid w-full flex-1 items-start gap-8 pt-1 lg:grid-cols-2 lg:gap-10">
+        <div className="grid w-full flex-1 items-start gap-8 pt-1 lg:grid-cols-[1fr_400px] lg:gap-10">
           <Hero />
           <SearchForm
             symptomText={symptomText}
