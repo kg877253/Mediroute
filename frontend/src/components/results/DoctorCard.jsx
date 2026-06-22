@@ -34,8 +34,8 @@ export default function DoctorCard({ doc, index }) {
             <p className="mt-1 text-base font-semibold text-teal-dark">{doc.specialty}</p>
             
             <div className="mt-2.5">
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-sm font-semibold ${availability.bg} ${availability.color}`}>
-                <span className="h-1.5 w-1.5 rounded-full bg-current"></span>
+              <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+                <span className="h-1.5 w-1.5 rounded-full bg-slate-400"></span>
                 {availability.status}
               </span>
             </div>

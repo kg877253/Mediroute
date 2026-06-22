@@ -33,15 +33,15 @@ export default function Hero() {
         {/* Stats row */}
         <div className="mt-6 grid grid-cols-3 gap-3">
           {[
-            { value: '8', label: 'Specialties', color: 'text-navy' },
-            { value: '5', label: 'Cities', color: 'text-navy' },
-            { value: '24/7', label: 'Emergency', color: 'text-red-600' },
+            { value: '8', label: 'Specialties', color: 'text-navy', border: 'border-l-4 border-navy' },
+            { value: '5', label: 'Cities', color: 'text-navy', border: 'border-l-4 border-teal' },
+            { value: '24/7', label: 'Emergency', color: 'text-red-600', border: 'border-l-4 border-red-500' },
           ].map((stat) => (
             <div
               key={stat.label}
-              className="rounded-2xl border border-slate-100 bg-slate-50/60 p-3.5 text-center hover:bg-slate-50 transition-all"
+              className={`rounded-2xl border border-slate-100 bg-white shadow-sm p-3.5 text-center ${stat.border}`}
             >
-              <p className={`text-2xl font-extrabold tracking-tight ${stat.color}`}>{stat.value}</p>
+              <p className={`text-3xl font-black tracking-tight ${stat.color}`}>{stat.value}</p>
               <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-0.5">{stat.label}</p>
             </div>
           ))}

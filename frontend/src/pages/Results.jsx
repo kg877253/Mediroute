@@ -43,8 +43,11 @@ function Results() {
     low: 'border-green-200 bg-green-50 text-green-700'
   }
 
-  const confidenceColor = confidence >= 90 ? 'text-green-600' :
-                         confidence >= 80 ? 'text-yellow-600' : 'text-red-600'
+  const confidenceBadgeStyles = confidence >= 70
+    ? 'bg-green-50 text-green-700 border-green-100'
+    : confidence >= 55
+      ? 'bg-amber-50 text-amber-700 border-amber-100'
+      : 'bg-red-50 text-red-700 border-red-100'
 
   const emergencyHospitals = {
     Delhi: [
@@ -211,9 +214,9 @@ function Results() {
             <section className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm">
               <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_280px]">
                 {/* Left Block: Assessment & Reasoning */}
-                <div className="p-8 md:p-10">
+                <div className="overflow-hidden min-w-0 p-8 md:p-10 pr-4 space-y-5">
                   {triageData.fallbackUsed && (
-                    <div className="mb-5 rounded-2xl border border-amber-100 bg-amber-50/50 p-4 text-xs font-semibold leading-relaxed text-amber-900 flex items-start gap-2.5">
+                    <div className="rounded-2xl border border-amber-100 bg-amber-50/50 p-4 text-xs font-semibold leading-relaxed text-amber-900 flex items-start gap-2.5">
                       <svg className="h-4.5 w-4.5 text-amber-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                       </svg>
@@ -223,29 +226,31 @@ function Results() {
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between gap-4 mb-4">
-                    <p className="text-xs font-bold uppercase tracking-wider text-teal">Symptom Triage Assessment</p>
-                    <div className={`text-base font-extrabold tracking-tight ${confidenceColor}`}>
+                  <div className="flex items-center justify-between gap-4">
+                    <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Symptom Triage Assessment</p>
+                    <span className={`inline-flex shrink-0 items-center rounded-full border px-3 py-1 text-lg font-medium ${confidenceBadgeStyles}`}>
                       {confidence}% Confident
-                    </div>
+                    </span>
                   </div>
 
-                  <div className="w-full bg-slate-100 rounded-full h-1.5 mb-6 overflow-hidden">
+                  <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
                     <div
                       className="bg-teal h-1.5 rounded-full transition-all duration-500"
                       style={{ width: `${confidence}%` }}
                     ></div>
                   </div>
 
-                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Recommended Specialty</p>
-                  <h1 className="mt-1 text-3xl md:text-4xl font-extrabold text-navy leading-tight">{specialty}</h1>
-                  
-                  <div className="mt-6">
-                    <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Clinical Reasoning</p>
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Recommended Specialty</p>
+                    <h1 className="mt-1 text-3xl md:text-4xl font-extrabold text-navy leading-tight break-words border-b border-slate-100 pb-4 mb-4">{specialty}</h1>
+                  </div>
+
+                  <div className="border-l-4 border-teal pl-4">
+                    <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Clinical Reasoning</p>
                     <p className="mt-2 text-base leading-relaxed text-slate-500 font-medium">{reasoning}</p>
                   </div>
 
-                  <div className="mt-6 flex gap-2.5 rounded-2xl border border-slate-100 bg-slate-50/50 p-4 text-sm font-medium text-slate-500">
+                  <div className="flex gap-2.5 rounded-2xl border border-slate-100 bg-slate-50/50 p-4 text-sm font-medium text-slate-500">
                     <svg className="h-4.5 w-4.5 text-slate-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -257,7 +262,7 @@ function Results() {
 
                 {/* Right Block: Route Info & PDF Download */}
                 <div className="border-t border-slate-100 bg-slate-50/50 p-8 lg:border-l lg:border-t-0 flex flex-col justify-center">
-                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Urgency Status</p>
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Urgency Status</p>
                   <div className="mt-2">
                     <span className={`inline-flex rounded-full border px-3 py-1.5 text-xs font-extrabold uppercase tracking-wide ${urgencyStyles[urgency] || urgencyStyles.medium}`}>
                       Urgency: {urgency}
@@ -265,7 +270,7 @@ function Results() {
                   </div>
 
                   <div className="mt-6 rounded-2xl bg-white border border-slate-100 p-4 shadow-sm">
-                    <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Triage Location</p>
+                    <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Triage Location</p>
                     <p className="mt-0.5 text-lg font-extrabold text-navy">{city}</p>
                   </div>
 
@@ -287,7 +292,7 @@ function Results() {
             <section className="space-y-4">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-teal">Recommended Specialists</p>
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Recommended Specialists</p>
                   <h2 className="text-2xl font-extrabold text-navy">Verified Medical Officers</h2>
                 </div>
                 <p className="text-xs font-semibold text-slate-400">
@@ -316,9 +321,9 @@ function Results() {
           </div>
 
           {/* Right Sidebar: Local Emergency and Safety Info */}
-          <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+          <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto no-scrollbar">
             <section className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-teal">Local Emergency Care</p>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Local Emergency Care</p>
               <h2 className="mt-1 text-xl font-extrabold text-navy">{city} Contacts</h2>
               <p className="mt-2 text-xs leading-relaxed text-slate-400">
                 In case of critical clinical developments, contact these top-tier emergency providers directly.
@@ -352,7 +357,7 @@ function Results() {
 
             <section className="rounded-3xl bg-navy p-6 text-white shadow-sm relative overflow-hidden">
               <div className="absolute right-0 bottom-0 translate-x-4 translate-y-4 text-white/5 font-black text-6xl pointer-events-none">+</div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-teal-light">Clinical Navigation Guard</p>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Clinical Navigation Guard</p>
               <p className="mt-2 text-xs leading-relaxed text-slate-300">
                 MediRoute does not diagnose conditions. Please consult with a certified medical doctor for definitive advice.
               </p>

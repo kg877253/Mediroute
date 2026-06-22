@@ -42,24 +42,15 @@ export default function SearchForm({
   }
 
   return (
-    <div style={{
-      borderRadius: '1.5rem',
-      border: '1px solid #e2e8f0',
-      background: '#ffffff',
-      boxShadow: '0 4px 24px rgba(30,39,97,0.08)',
-      overflow: 'hidden'
-    }}>
-      <div style={{
-        background: 'linear-gradient(135deg, #1E2761 0%, #2E3B87 100%)',
-        padding: '1.25rem 1.5rem'
-      }}>
-        <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#039EAF', margin: 0 }}>
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="border-l-4 border-teal bg-white px-6 py-5">
+        <p className="text-teal text-xs font-bold uppercase tracking-wider">
           Start a care route
         </p>
-        <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#ffffff', margin: '0.25rem 0 0', lineHeight: 1.2 }}>
+        <h3 className="mt-1 text-xl font-extrabold text-navy leading-tight">
           Describe Your Symptoms
         </h3>
-        <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', margin: '0.25rem 0 0' }}>
+        <p className="mt-1 text-xs text-slate-500">
           AI matches your symptoms to the right specialist
         </p>
       </div>
