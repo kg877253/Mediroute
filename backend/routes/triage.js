@@ -1,5 +1,6 @@
 const express = require("express");
-const { GoogleGenerativeAI, Type } = require("@google/generative-ai");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
 
 const router = express.Router();
 
@@ -43,18 +44,18 @@ router.post("/", async (req, res) => {
         temperature: 0.1,
         responseMimeType: "application/json",
         responseSchema: {
-          type: Type.OBJECT,
+          type: "object",
           properties: {
             specialty: {
-              type: Type.STRING,
+              type: "string",
               enum: VALID_SPECIALTIES
             },
             urgency: {
-              type: Type.STRING,
+              type: "string",
               enum: VALID_URGENCIES
             },
-            reasoning: { type: Type.STRING },
-            confidence: { type: Type.INTEGER }
+            reasoning: { type: "string" },
+            confidence: { type: "integer" }
           },
           required: ["specialty", "urgency", "reasoning", "confidence"]
         }
