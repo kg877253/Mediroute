@@ -85,7 +85,7 @@ function Home() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-hidden page-shell font-sans text-text">
+    <div className="relative flex h-full w-full flex-col overflow-x-hidden page-shell font-sans text-text">
       <Header onOpenEmergency={openEmergencyMode} />
 
       <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-6">
