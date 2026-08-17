@@ -22,7 +22,7 @@ function Results() {
 
   if (!triageData || !searchData) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-bg p-6 text-center font-sans">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-bg p-6 text-center font-sans bg-amber-200">
         <div className="max-w-md rounded-3xl border border-slate-200 bg-white p-10 shadow-sm animate-fade-in-up">
           <h2 className="text-2xl font-bold text-navy">No search details found</h2>
           <p className="mt-3 text-sm text-slate-500">Please start a search from the home page first.</p>
