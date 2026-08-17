@@ -167,7 +167,7 @@ function Results() {
         </div>
       </header>
 
-      <main className="w-full max-w-7xl mx-auto px-6 py-10 md:py-16 flex-1 relative z-10 animate-fade-in-up">
+      <main className="w-full max-w-7xl mx-auto px-6 py-10 md:py-16 flex-1 relative z-10 animate-fade-in-up justify-center">
         {urgency === 'high' && (
           <section className="mb-10 overflow-hidden rounded-3xl bg-[#dc2626] text-white">
             <div className="flex flex-col gap-6 p-8 md:flex-row md:items-center md:justify-between">
