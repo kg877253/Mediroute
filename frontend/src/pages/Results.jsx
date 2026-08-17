@@ -142,7 +142,7 @@ function Results() {
   }
 
   return (
-    <div className="page-shell flex min-h-screen flex-col">
+    <div className="page-shell flex h-[80%] w-[80%] flex-col">
       <header className="bg-navy relative overflow-hidden">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 md:px-10 md:py-6 relative z-10">
           <Link to="/" className="group flex min-w-0 shrink-0 items-center gap-4">
